@@ -1,0 +1,46 @@
+% Chapter Template
+
+\chapter{Charakterystyka Quadrocopterów} % Main chapter title
+
+\label{Chapter2} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+\lhead{Chapter 2. \emph{Charakterystyka Quadrocopterów}} % Change X to a consecutive number; this is for the header on each page - perhaps a shortened title
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+\section{Zasada działania}
+Quadrocopter jako podklasa helokopterów unosi się dzięki czterem wirnikom zapewniającym siłę nośną jak również umożliwiającym zmianę kierunku. Jedynym parametrem jaki należy zmieniać to prędkość obrotowa poszczególnych wirników, dzięki czemu można uzyskać obroty wokół każdej z trzech osi jak również ruch postępowy wzdłuż trzech kierunkówk. Dzięki temu sama konstrukcja mechaniczna jest bardzo prosta i nie wymaga ruchomych części, dzięki czemu quadrocoptery zyskały swoją popularność. W zależności od ustawienia wirników względem względnego układu współrzędnych kwadrokoptera rozróżniamy jego dwie podstawowe konfiguracje - konfiguracja ''+''  oraz konfiguracja ''X'' (Odniesienia do bibliografii)
+
+\begin{figure}[htbp]
+	\centering
+		\includegraphics[width=0.7\textwidth]{Pictures/quadrotor_configurations.png}
+		%\rule{35em}{0.5pt}
+	\caption[Konfiguracje kwadrokopterów]{Możliwe dwie konfiguracje ustawień wirników względem osi kwadrokoptera.}
+	\label{fig:Konfiguracje kwadrokopterów}
+\end{figure}
+
+W przypadku konfiguracji ''+'' wirniki 1 oraz 2 umieszczone są na osi X kwadrokoptera, natomiast wirniki 3 i 4 na osi Y kwadrokoptera. Ruch wzdłuż X lub Y polega na zmianie prędkości obrotowych jedynie dwóch silników leżących na danej osi, podczas gdy prędkości obrotowe pozostałych dwóch pozostają bez zmian. Sprawia to że algorytm kontrolujący ruch kwadrokoptera jest prostrzy niż dla konfiguracji "X". W konfiguracji "X" każdy z wirników leży pomiędzy osiami X i Y kwadrokoptera. W związku z tym, ruch wzdłuż osi X lub Y odbywa się dzięki zmianie prędkości obrotowych wszystkich wirników jednocześnie. Sprawia to że algorytm sterujący będzie trudniejszy lecz niesie ze sobą jedną zaletę - przy sterowaniu czterema wirnikami zamiast dwoma mniejsze będą również różnice w zmianie prędkości obrotowych poszczególnych silników. Wprzypadku gdy silniki pracują na znacznym procencie swojej mocy (niedalego granicy nasycenia) rozsądniejsze jest zastosowanie konfiguracji "X" zapewniającej większe pole do kontroli kwadrokoptera w takich warunkach. 
+
+W projekcie, będącym częścią niniejszej pracy użyto konfiguracji "X" dlatego też w dalszej części pracy tylko ona będzie omawiana.
+
+
+
+%----------------------------------------------------------------------------------------
+%	SECTION 2
+%----------------------------------------------------------------------------------------
+
+\section{Podstawowe podzespoły}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 3
+%----------------------------------------------------------------------------------------
+
+\section{Konstrukcje nośne}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 4
+%----------------------------------------------------------------------------------------
+
+\section{Kierunki rozwoju}
