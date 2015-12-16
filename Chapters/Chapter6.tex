@@ -1,6 +1,6 @@
 % Chapter Template
 
-\chapter{Oprogramowanie} % Main chapter title
+\chapter{Oprogramowanie kwadrokoptera} % Main chapter title
 
 \label{Chapter6} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
@@ -15,35 +15,37 @@
 
 \section{Kontroler lotu}
 
+\subsection{Funkcje programowe}
+
 Oprogramowanie kontrolera lotu realizuje cztery podstawowe zadania:
 
 \begin{itemize}
-	\item Odbiór danych sterujących 
+	\item Odbiór poleceń 
 	\item Odczyt pomiarów z czujników
 	\item Generowanie sygnałów sterujących 
 	\item Wysyłanie sygnałów sterujących do kontrolerów silników
 \end{itemize}
 
-Pierwotna wersja oprogramowania powstała w języku assembler avr, jednakże zrezygnowano z tej koncepcji ze względu na dużą liczbę gotowych bibliotek służących do obsługi czujników pomiarowych, napisanych w języku C oraz ze względu na duże trudności wynikające przy operacjach arytmetycznych na liczbach 16-bitowych oraz 32-bitowych wykonywanych przez algorytm stabilizacji lotu. 
+Pierwsza wersja oprogramowania powstała w języku assembler avr, jednakże zrezygnowano z tej koncepcji ze względu na dużą liczbę gotowych bibliotek służących do obsługi czujników pomiarowych, napisanych w języku C oraz ze względu na istotne trudności powstające przy programowaniu w assemblerze operacji arytmetycznych na liczbach 16-bitowych oraz 32-bitowych. Operacje te są wykonywane przez algorytm stabilizacji lotu. 
 
 Druga, finalna wersja oprogramowania została napisana w języku C, z wykorzystaniem gotowych bibliotek służących do obsługi czujnika MPU-6050 oraz bibliotek implementujących regulator PID, w których autor pracy wprowadził poprawki adaptujące je do projektu kwadrokoptera.
 
 
 \subsection{Komunikacja radiowa}
 
-Komunikacja radiowa, realizowana jest za pomocą modułu Bluetooth HC-06 udostępniającego interfejs UART do nadawania i odbierania danych z poziomu mikrokontrolera sterującego kwadrokopterem.
+Komunikacja radiowa realizowana jest za pomocą modułu Bluetooth HC-06 udostępniającego interfejs UART do nadawania i odbierania danych z poziomu mikrokontrolera sterującego kwadrokopterem.
 Chcąc zrealizować płynną transmisję danych między kwadrokopterem a użytkownikiem obrano następujące założenia:
 \begin{itemize}
-	\item Kwadrokopter widziany z punktu użytkownika jako zbiór 8-bitowych rejestrów
-	\item Wartości rejestrów kwadrokoptera przechowywane w pamięci RAM jako tablica zmiennych 8-bitowych
-	\item Protokół binarny służący do wymiany danych między użytkownikiem a kwadrokopterem
+	\item Kwadrokopter jest widziany z punktu użytkownika jako zbiór 8-bitowych rejestrów.
+	\item Wartości rejestrów są kwadrokoptera przechowywane w pamięci RAM jako tablica zmiennych 8-bitowych.
+	\item Protokół binarny służący do wymiany danych między użytkownikiem a kwadrokopterem ma poniższe cechy:
 	\begin{itemize}
-		\item Minimum dwie komendy: zapis rejestrów i odczyt rejestrów
-		\item Użytkownik zawsze inicjuje transmisję
+		\item minimum dwie komendy: zapis rejestrów i odczyt rejestrów,
+		\item użytkownik zawsze inicjuje transmisję.
 	\end{itemize} 
 \end{itemize}
 
-Idea zastosowania protokołu binarnego znacząco upraszcza implementację po stronie mikrokontrolera, skracając tym samym czas potrzebny na przetwarzanie danych. Struktura wiadomości wygląda następująco:
+Idea zastosowania protokołu binarnego znacząco upraszcza implementację oprogramowania po stronie mikrokontrolera, skracając tym samym czas potrzebny na przetwarzanie danych. Struktura wiadomości wygląda następująco:
 
 <Kod komendy><Długość wiadomości w bajtach><Pole danych wiadomości>
 
@@ -83,14 +85,14 @@ typedef struct
 }QuadrocopterData;
 \end{lstlisting}
 
-Powyższy listing przedstawia strukturę zdefiniowaną w programie, która jets używana do przechowywania danych odebranych  przez kwadrokopter.
+Powyższy listing przedstawia strukturę zdefiniowaną w programie, która jest używana do przechowywania danych odebranych  przez kwadrokopter.
 
 Składa się ona z tablicy ''raw\_data'' przechowującej dane bezpośrednio odebrane przez interfejs UART. Następnie za pomocą unii, dane z tablicy ''raw\_data'' rzutowane są na kod komendy, długość wiadomości oraz polę danych wiadomości.
 
 Dodatkowo w skład struktury wchodzą dwie flagi:
 \begin{itemize}
 	\item data\_ready - flaga ustawiana w przerwaniu odbioru danych przez interfejs UART, informująca program główny o odebraniu całej wiadomości.
-	\item data\_index - index wykorzytstywany przez procedurę odbierającą dane przez interfejs UART do zapisywania danych w tablicy ''raw\_data''. 
+	\item data\_index - index wykorzystywany przez procedurę odbierającą dane przez interfejs UART do zapisywania danych w tablicy ''raw\_data''. 
 \end{itemize}
 
 \begin{lstlisting}
@@ -119,7 +121,7 @@ void UART_init(void)
 }
 \end{lstlisting}
 
-Powyższy listing przedstawia procedurę inicjalizacji interfejsu UART. Składa się ona z wyzerowania pól struktury ''quadrocopter\_rx\_data'' przechowującej dane odebrane przez kwadrokopter, oraz z inicjalizacji sprzętowego modułu UART, w który wyposażony jest mikrokontroler ATmega328p poprzez ustawienie rejestrów:
+Powyższy listing przedstawia procedurę inicjalizacji interfejsu UART. Składa się ona z wyzerowania pól struktury ''quadrocopter\_rx\_data'' przechowującej dane odebrane przez kwadrokopter oraz z inicjalizacji sprzętowego modułu UART, w który wyposażony jest mikrokontroler ATmega328p, poprzez ustawienie rejestrów:
 \begin{itemize}
 	\item UBRR0H, UBRR0L, UCSR0A - rejestry odpowiedzialne za konfigurację szybkości transmisji
 	\item UCSR0C - rejetsr odpowiedzialny za ustawianie formatu ramki interfejsu UART
@@ -182,17 +184,17 @@ Powyższy listing przedstawia sposób realizacji rejestrów wewnętrznych kwadro
 \begin{itemize}
 	\item Adresy 0-1: Nieużywane rejestry, przewidziane na potrzeby rozszerzania funkcji protokołu w przyszłości.
 	\item Adresy 2-5: Rejestry używane w trakcie lotu, przechowujące zadane wartości ciągu silników oraz prędkości kątowych wokół trzech osi.
-	\item Adresy 6-11: Rejestry przechowujące szesnanstobitowe wartości współczynników P,I,D kontrolera PID odpowiedzialnego za stabilizację prędkości kątowej wokół osi X
-	\item Adresy 12-17: Rejestry przechowujące 16-bitowe wartości współczynników P,I,D kontrolera PID odpowiedzialnego za stabilizację prędkości kątowej wokół osi Y
-	\item Adresy 18-23: Rejestry przechowujące 16-bitowe wartości współczynników P,I,D kontrolera PID odpowiedzialnego za stabilizację prędkości kątowej wokół osi Z
-	\item Adres 24: Rejest używany do testów, włączający debugowe diody LED na płytce kontrolera lotu
-	\item Adresy 25-28: Rejestry używane do testów, służące do wpisania bezpośredniej wartości sygnałów PWM wysyłanych do odpowiedniego kontrolera silnika
-	\item Adresy 29-30: Rejestry używane do testów, służące do włączania testowania regulatora PID dla osi X lub Y
-	\item Adresy 31-33: Rejestry używane do programowego wprowadzania offsetu dla wartości odczytywanych z żyroskopu
-	\item Adres 34: Rejestr używany do testów, służący do włączania wysyłania komunikatów debugowych z programu 
+	\item Adresy 6-11: Rejestry przechowujące 16-bitowe wartości współczynników P,I,D kontrolera PID, odpowiedzialnego za stabilizację prędkości kątowej wokół osi X.
+	\item Adresy 12-17: Rejestry przechowujące 16-bitowe wartości współczynników P,I,D kontrolera PID, odpowiedzialnego za stabilizację prędkości kątowej wokół osi Y.
+	\item Adresy 18-23: Rejestry przechowujące 16-bitowe wartości współczynników P,I,D kontrolera PID, odpowiedzialnego za stabilizację prędkości kątowej wokół osi Z.
+	\item Adres 24: Rejestr używany do testów, włączający debugowe diody LED na płytce kontrolera lotu.
+	\item Adresy 25-28: Rejestry używane do testów, służące do wpisania bezpośredniej wartości sygnałów PWM wysyłanych do odpowiedniego kontrolera silnika.
+	\item Adresy 29-30: Rejestry używane do testów, służące do włączania testowania regulatora PID dla osi X lub Y.
+	\item Adresy 31-33: Rejestry używane do programowego wprowadzania offsetu dla wartości odczytywanych z żyroskopu.
+	\item Adres 34: Rejestr używany do testów, służący do włączania wysyłania komunikatów debugowych z programu.
 \end{itemize}
 
-Oprócz tablicy przechowującej wartości rejestrów wewnętrznych kwadrokoptera, w kodzie programu zdefiniowana jest również tablica wskaźników na funkcje, które są wołane przy midyfikacji wartości odpowiadającego im rejestru wewnętrznego kwadrokoptera. Jest to bardzo proste i pożyteczne narzędzie, dające możliwość automatycznego wywoływania ofpowiednich funkcji przy modyfikacji wybranych rejestrów.
+Oprócz tablicy przechowującej wartości rejestrów wewnętrznych kwadrokoptera, w kodzie programu zdefiniowana jest również tablica wskaźników na funkcje, które są wołane przy modyfikacji wartości odpowiadającego im rejestru wewnętrznego kwadrokoptera. Jest to bardzo proste i pożyteczne narzędzie, dające możliwość automatycznego wywoływania odpowiednich funkcji przy modyfikacji wybranych rejestrów.
 
 \begin{lstlisting}
 #define INVALID_DATA_COUNT -2
@@ -246,9 +248,9 @@ Powyższy listing przedstawia funkcję służącą do zapisu rejestrów kwadroko
 
 Zapis rejestrów odbywa się w dwóch krokach:
 
-Sprawdzanie prawidłowości odebranych danych: funkcja sprawdza czy pola odpowiadające liczbie rejestrów do zapisu oraz adresu pierwszego rejestru do zapisu mają prawidłowe wartości 
+Sprawdzanie prawidłowości odebranych danych: funkcja sprawdza czy pola odpowiadające liczbie rejestrów do zapisu oraz adresu pierwszego rejestru do zapisu mają prawidłowe wartości.
 
-Zapis rejestrów: funkcja iteruje po kolejnych indeksach tablicy przechowującej wartości rejestrów kwadrokoptera, i zastepuje je nowymi wartościami pobieranymi z pola danych wiadomości. Jednocześnie przy każdym zapisie rejestru, funkcja sprawdza czy rejestr ten ma przypisaną swoją procedurę wywoływaną podczas jego zapisu, wywołując ją w razie potrzeby.
+Zapis rejestrów: funkcja iteruje po kolejnych indeksach tablicy przechowującej wartości rejestrów kwadrokoptera, i zastępuje je nowymi wartościami pobieranymi z pola danych wiadomości. Jednocześnie przy każdym zapisie rejestru funkcja sprawdza, czy rejestr ten ma przypisaną swoją procedurę wywoływaną podczas jego zapisu, wywołując ją w razie potrzeby.
 
 Działanie funkcji odczytującej wartości rejestrów kwadrokoptera jest analogiczne, dlatego też zbędne jest omawianie kodu tej funkcji.
 
@@ -287,19 +289,19 @@ int main(void)
 }
 \end{lstlisting}
 
-Funkcje ''reg\_array\_init'' oraz ''handlers\_init'' służą odpowiednio do zerowania początkowych wartości rejestrów kwadrokoptera oraz do odpowiedniego przypisania wskaźników funkji wołanych podczas zmiany wartości rejestrów kwadrokoptera. Funkcja ''QuadrocopterRxDataClear'' służy do zerowania odpowiednich pól struktury przechowującej odebrane dane, pozwalając tym samym na prawidłowy odbiór następnej wiadomości.
+Funkcje ''reg\_array\_init'' oraz ''handlers\_init'' służą odpowiednio do zerowania początkowych wartości rejestrów kwadrokoptera oraz do odpowiedniego przypisania wskaźników funkcji wołanych podczas zmiany wartości rejestrów kwadrokoptera. Funkcja ''QuadrocopterRxDataClear'' służy do zerowania odpowiednich pól struktury przechowującej odebrane dane, pozwalając tym samym na prawidłowy odbiór następnej wiadomości.
 
 \subsection{Obsługa czujników}
 
-Pomiar prędkości kątowych kwadrokoptera realizowany jest za pomocą czujnika MPU-6050 komunikującego się za pomocą magistrali I\textsuperscript{2}C. Do jego obsługo w dużej mierze została wykorzystana gotowa biblioteka naisana na platformę Arduino, która jednak w oryginalnej wersji przygotowana została w języku C++, dlatego też zostały w niej wprowadzone odpowiednie poprawki mające na celu przejście z programowania obiektowego wykorzytującego klasy na programowanie z wykorzystaniem struktur. 
+Pomiar prędkości kątowych kwadrokoptera realizowany jest za pomocą czujnika MPU-6050 komunikującego się z mikrokontrolerem za pomocą magistrali I\textsuperscript{2}C. Do jego obsługo w dużej mierze została wykorzystana gotowa biblioteka napisana na platformę Arduino, która jednak w oryginalnej wersji przygotowana została w języku C++, dlatego też zostały do niej wprowadzone odpowiednie poprawki, mające na celu przejście z programowania obiektowego wykorzystującego klasy na programowanie z wykorzystaniem struktur. 
 
-Aby możliwa była komunikacja z czujnikiem, należy najpierw dokonać inicjalizacji sprzętowego modułu TWI, w który wyposażony jest mikokontroler ATmega328p a następnie należy prawdiłowo zainicjalizować sam układ MPU-6050 tak aby możliwy był odczyt danych z żyroskopu.
+Aby możliwa była komunikacja z czujnikiem, należy najpierw dokonać inicjalizacji sprzętowego modułu TWI, w który wyposażony jest mikokontroler ATmega328p, a następnie należy prawidłowo zainicjalizować sam układ MPU-6050 tak, aby możliwy był odczyt danych z żyroskopu.
 
 W projekcie zachowano oryginalną strukturę biblioteki do obsługi modułu MPU-6050, która wygląda następująco:
 \begin{itemize}
-	\item I2C\_dev - najwyższa warstwa abstrakcji, dająca użytkownikowi dostęp do urządzeń podłączonych do magistrali I\textsuperscript{2}C
-	\item TwoWire - middleware biblioteki, realizujący odbiór i wysyłanie danych oraz zarządzanie transmisją danych
-	\item TWI - najniższa warstwa biblioteki, zapewniająca podstawową waststwę anstrakcji sprzętowej
+	\item I2C\_dev - najwyższa warstwa abstrakcji, dająca użytkownikowi dostęp do urządzeń podłączonych do magistrali I\textsuperscript{2}C.
+	\item TwoWire - middleware biblioteki, realizujący odbiór i wysyłanie danych oraz zarządzanie transmisją danych.
+	\item TWI - najniższa warstwa biblioteki, zapewniająca podstawową warstwę abstrakcji sprzętowej.
 \end{itemize}
 
 \begin{lstlisting}
@@ -309,7 +311,7 @@ void I2C_dev_init(void)
 }
 \end{lstlisting}
 
-Powyższy listing przedstawia funkcję inicjalizującą urządzenie podłączone do magistrali I\textsuperscript{2}C. Jak widac jest to prosta funkcja, która woła jedynie funkcję inicjalizującą umieszczoną w niższej warstwie biblioteki.
+Powyższy listing przedstawia funkcję inicjalizującą urządzenie podłączone do magistrali I\textsuperscript{2}C. Jak widać jest to prosta funkcja, która wywołuje jedynie funkcję inicjalizującą umieszczoną w niższej warstwie biblioteki.
 
 \begin{lstlisting}
 uint8_t TwoWire_rxBuffer[BUFFER_LENGTH];
@@ -337,7 +339,7 @@ void TwoWire_begin(void)
 }
 \end{lstlisting}
 
-Powyższy listing przedstawia funkcję inicjalizującą middleware biblioteki obsługującej interfejs TWI. Inicjalizuje ona indeksy służące do przesuwania się po buforach nadawczum oraz odbiorczym wykorzystywanym w trakcie transmisji danych oraz zeruje zmienne informujące o długośic bajtów znajdujących się w każdym z tych buforów. Na sam koniec funkcja ta odwołuje sie do niższej warstwy biblioteki za pomocą funkcji ''twi\_init()''
+Powyższy listing przedstawia funkcję inicjalizującą middleware biblioteki obsługującej interfejs TWI. Inicjalizuje ona indeksy służące do przesuwania się po buforach nadawczym oraz odbiorczym, wykorzystywanych w trakcie transmisji danych oraz zeruje zmienne informujące o liczbie bajtów znajdujących się w każdym z tych buforów. Na sam koniec funkcja ta odwołuje się do niższej warstwy biblioteki za pomocą funkcji ''twi\_init()''
 
 \begin{lstlisting}
 void twi_init(void)
@@ -388,7 +390,7 @@ void MPU6050_initialize(void)
 }
 \end{lstlisting}
 
-Zadaniem powyższej funkcji jest ustawienie ospowiedniego źródła sygnału taktującego układ MPU6050, zainicjalizowanie akcelerometru oraz żyroskopu a na sam koniec wybudzenie czujnika ze stanu uśpienia, w którym znajduje się domyślnie po podaniu napięcia zasilania.
+Zadaniem powyższej funkcji jest ustawienie odpowiedniego źródła sygnału taktującego układ MPU6050, zainicjalizowanie akcelerometru oraz żyroskopu, a na sam koniec wybudzenie czujnika ze stanu uśpienia, w którym znajduje się domyślnie po podaniu napięcia zasilania.
 
 \begin{lstlisting}
 void MPU6050_getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
@@ -402,7 +404,7 @@ void MPU6050_getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int1
 }
 \end{lstlisting}
 
-Po poprawnym zainicjalizowaniu czujnika MPU-6050 można przejść do odczytu wartości wyjściowych z akcelerometru i żyroskopu. Dokonuje się tego za pomocą funkcji MPU6050\_getMotion6 przedstawionej na powyższym listingu. Funkcja jako parametry przyjmuje sześć 16-bitowych wskaźników na zmienne zadeklarowane w obszarze kodu z którego jest ona wołana, wpisując do nich odpowiednio wartości przyspieszeń liniowych w osiach (zmienne ax, ay, az) oraz prędkości kątowych (zmienne gx, gy, gz). Do odczytu wartości pomiarów z czujników wykorzystana jest funkcja I2Cdev\_readBytes, która jako parametry przyjmuje adres urządzenia na magistrali I\textsuperscript{2}C, adres pierwszego rejestru wewnętrznego czujnika MPU-6050 do odczytu, liczbę rejestrów do odczytu, oraz wskaźnik na roboczy bufor, do którego zostaną skopiowane dane. W wywołaniu tej funkcji, ostatni argument, którym jest ''buffer'' jest globalną tablicą zdefiniowaną w obrębie najwyższej warstwy biblioteki obsługującej czujnik MPU-6050.
+Po poprawnym zainicjalizowaniu czujnika MPU-6050 można przejść do odczytu wartości wyjściowych z akcelerometru i żyroskopu. Dokonuje się tego za pomocą funkcji MPU6050\_getMotion6 przedstawionej na powyższym listingu. Funkcja jako parametry przyjmuje sześć 16-bitowych wskaźników na zmienne zadeklarowane w obszarze kodu z którego jest ona wołana, wpisując do nich odpowiednio wartości przyspieszeń liniowych w osiach (zmienne ax, ay, az) oraz prędkości kątowych (zmienne gx, gy, gz). Do odczytu wartości pomiarów z czujników wykorzystana jest funkcja I2Cdev\_readBytes, która jako parametry przyjmuje adres urządzenia na magistrali I\textsuperscript{2}C, adres pierwszego rejestru wewnętrznego czujnika MPU-6050 do odczytu, liczbę rejestrów do odczytu, oraz wskaźnik na roboczy bufor, do którego zostaną skopiowane dane. W wywołaniu tej funkcji ostatni argument, którym jest ''buffer'', jest globalną tablicą zdefiniowaną w obrębie najwyższej warstwy biblioteki obsługującej czujnik MPU-6050.
 
 
 Wykorzystanie omówionych funkcji oraz struktur, z pominięciem kodu realizującego pozostałe zadania kontrolera lotu, wygląda następująco:
@@ -442,7 +444,7 @@ Jak widać wewnątrz głównej funkcji programu tworzone są zmienne przechowuj�
 
 \subsection{Algorytm stabilizacji lotu}
 
-Algorytm stabilizacji i kontroli lotu przyjmuje dane wyjściowe z żryroskopu informujące o rzeczywistych prędkościach kątowych kwadrokoptera wokół wszystkich osi układu współrzędnych i na podstawie ich wartości oraz watrości zadanych prędkości kątowych oraz ciągu silników oblicza wartości sygnałów sterujących wysyłanych do sterowników silników. Podczas liczenia tych sygnałów pojawia się jednak problem różnicy skali wartości, sygnałów z żyroskopu oraz sygnałów sterujących odbieranych drogą radiową. Jak to było pokazane w poprzednim podrozdziale, żyroskop wewnątrz czujnika MPU-6050 konfigurowany jest tak aby maksymalna mierzona prędkość kątowa wynosiła 250 stopni na sekundę (TODO). Jako że wartości wyjściowe z żyroskopu są 16-bitową liczbą ze znakiem wartość -32768 będzie oznaczała prędkość kątową -250 stopni na sekundę a wartość 32767 oznaczać będzie 250 stopni na sekundę. Zadane wartości prędkości kątowych przesyłane są jako liczby 8-bitowe ze znakiem, dlatego też należy zrzutować je na przedział adekwatny do wartości odczytywanych z żyroskopu. Gdyby wartości zadane zostały zrzutowane bezpośrednio na przedział (-32768,32767) oznaczałoby to że dla maksymalnego wychylenia manetek pilota kwadrokoptera, zacząłby się on obracać z prędkością kątową 250 stopni na sekundę co z jednej strony dawałoby możliwość wykonywania bardzo agresywnych manewrów, lecz utrudniałoby pilotaż niedoświadczonej osobie. Dlatego też ze względów bezpieczeństwa jako maksymalną wartość prędkości obrotowej wokół każdej z osi przyjęto 30 stopni na sekundę. Osiągnięto to za pomocą odpowiednio przygotowanych definicji preprocesora, przedstawionych na poniższym listingu
+Algorytm stabilizacji i kontroli lotu przyjmuje dane wyjściowe z żyroskopu informujące o rzeczywistych prędkościach kątowych kwadrokoptera wokół wszystkich osi układu współrzędnych i na podstawie ich wartości oraz wartości zadanych prędkości kątowych oraz ciągu silników oblicza wartości sygnałów sterujących wysyłanych do sterowników silników. Podczas przetwarzania tych danych pojawia się jednak problem różnicy skali wartości dla sygnałów z żyroskopu oraz sygnałów sterujących odbieranych drogą radiową. Jak to pokazano w  podrozdziale 6.2.3, żyroskop wewnątrz czujnika MPU-6050 konfigurowany jest tak, aby maksymalna mierzona prędkość kątowa wynosiła 250 stopni na sekundę (TODO). Jako że wartości wyjściowe z żyroskopu są 16-bitową liczbą ze znakiem wartość -32768 będzie oznaczała prędkość kątową -250 stopni na sekundę a wartość 32767 oznaczać będzie 250 stopni na sekundę. Zadane wartości prędkości kątowych przesyłane są jako liczby 8-bitowe ze znakiem, dlatego też należy zrzutować je na przedział adekwatny do wartości odczytywanych z żyroskopu. Gdyby wartości zadane zostały zrzutowane bezpośrednio na przedział (-32768,32767) oznaczałoby to, że dla maksymalnego wychylenia manetek pilota kwadrokoptera, zacząłby się on obracać z prędkością kątową 250 stopni na sekundę co z jednej strony dawałoby możliwość wykonywania bardzo agresywnych manewrów, lecz utrudniałoby pilotaż niedoświadczonej osobie. Dlatego też ze względów bezpieczeństwa jako maksymalną wartość prędkości obrotowej wokół każdej z osi przyjęto 30 stopni na sekundę. Osiągnięto to za pomocą odpowiednio przygotowanych definicji preprocesora, przedstawionych na poniższym listingu
 
 \begin{lstlisting}
 #define GYRO_MAX_RANGE 250L
@@ -472,7 +474,7 @@ int16_t map(int16_t x, int32_t in_min, int32_t in_max, int32_t out_min, int32_t 
 }
 \end{lstlisting}
 
-Funkcja map, służy do rzutowania liczby x zawierającej się w przedziale (in\_minn, in\_max) na przedział (out\_min, out\_max). Przykład jej użycia przedstawia poniższy listing.
+Funkcja map służy do rzutowania liczby x zawierającej się w przedziale (in\_min, in\_max) na przedział (out\_min, out\_max). Przykład jej użycia przedstawia poniższy listing.
 
 \begin{lstlisting}
 temp_i16 = (int16_t)(reg_array[REG_THRUST]);
@@ -491,7 +493,7 @@ temp_i16 = (int16_t)temp_i8;
 yaw_full_range = map(temp_i16,-127,127,YAW_MIN_VALUE,YAW_MAX_VALUE);
 \end{lstlisting}
 
-Powyższy fragment kodu odpowiedzialny jest za pobieranie zadanych wartości ciągu oraz prędkości kątowych kwadrokoptera, oraz rzutowanie ich na przedziały określone za pomocą definicji preprocesora ograniczając tym samym maksymalne prędkości z jakimi kwadrokopter będzie mógł się obracać wokół swoich osi.
+Powyższy fragment kodu odpowiedzialny jest za pobieranie zadanych wartości ciągu oraz prędkości kątowych kwadrokoptera, oraz rzutowanie ich na przedziały określone za pomocą definicji preprocesora, ograniczając tym samym maksymalne prędkości z jakimi kwadrokopter będzie mógł się obracać wokół swoich osi.
 
 Po odpowiednim przygotowaniu zadanych wartości prędkości kątowych oraz ciągu silników, algorytm sterujący przechodzi do wygenerowania sygnałów sterujących dla kontrolerów silników. Służą mu do tego regulatory PID, których implementacja została w dużej mierze oparta na dokumencie ''AVR221: Discrete PID controller''. Kod realizujący funkcje regulatora PID przedstawia poniższy listing:
 
@@ -537,7 +539,7 @@ int16_t pid_Controller(int16_t setPoint, int16_t processValue, struct PID_DATA *
 }
 \end{lstlisting}
 
-Jak widać jest to klasyczna implementacja regulatora PID, obliczającego na wstępie uchyb między wartością zadaną a zmierzoną. Następnie po obliczeniu całki z wartości uchybu i sprawdzeniu czy nie wybiega ona poza wartości graniczne obliczane są kolejno człony P, I oraz D regulatora. Następnie po ich dodaniu regulator sprawdza czy wartość wyjściowa nie wykracza poza maksymalną lub minimalną dozwoloną wartość sygnału wyjściowego i w razie potrzeby dokonuje odpowiedniej korekcji. Wśród argumentów wejściowych do tej funkji, jedymym który może nie być zrozumiały w pierwszej chwili jest wskaźnik pid\_st - jest to wskaźnik na strukturę PID\_DATA, przechowującą wartości członów proporcjonalnego, całkującego oraz różniczkującego regulatora, wraz z całką sygnału błedu oraz ostatnią zmierzoną wartością sygnału, która niezbędna jest przy lczeniu jego pochodnej w następnej iteracji algorytmu.
+Jak widać jest to klasyczna implementacja regulatora PID, obliczającego na wstępie uchyb między wartością zadaną a zmierzoną. Następnie po obliczeniu całki z wartości uchybu i sprawdzeniu, czy nie wybiega ona poza wartości graniczne, obliczane są kolejno człony P, I oraz D regulatora. Po ich dodaniu regulator sprawdza czy wartość wyjściowa nie wykracza poza maksymalną lub minimalną dozwoloną wartość sygnału wyjściowego i w razie potrzeby dokonuje odpowiedniej korekcji. Wśród argumentów wejściowych do tej funkcji, jedymym który może nie być zrozumiały w pierwszej chwili jest wskaźnik pid\_st - jest to wskaźnik na strukturę PID\_DATA, przechowującą wartości członów proporcjonalnego, całkującego oraz różniczkującego regulatora, wraz z całką sygnału błędu oraz ostatnią zmierzoną wartością sygnału, która niezbędna jest przy liczeniu jego pochodnej w następnej iteracji algorytmu.
 
 \begin{lstlisting}
 pid_pitch = pid_Controller(pitch_full_range, gx, &pidData_Array[PITCH_PID]);
@@ -581,7 +583,7 @@ else
 }
 \end{lstlisting}
 
-Powyższy listing przedstawia algorytm generowania sygnałów PWM, trafiających nastepnie do sterowników silników. Sygnały te są generowane tylko w przypadku, gdy zadana wartość ciągu silników przekracza 5\% całkowitego zakresu. Jest to zabezpieczenie mające na celu uniemożliwienie pijawienia się ujemnych wartości sterujących silnikami. W kodzie programu, w celu rozróżnienia który sygnał PWM odpowiada któremu silnikowi uzyto następujących oznaczeń: f-front (silnik przedni), b-back(silnik tylny), l-left(silnik lewy), r-right(silnik prawy), zatem sygnał pwm\_fr jest odpowiedzialny za sterowanie przednim prawym silnikiem kwadrokoptera itd. Jak widać na powyższym listingu, sygnały pwm generowane są w trzech etapach:
+Powyższy listing przedstawia algorytm generowania sygnałów PWM, trafiających nastepnie do sterowników silników. Sygnały te są generowane tylko w przypadku, gdy zadana wartość ciągu silników przekracza 5\% całkowitego zakresu. Jest to zabezpieczenie mające na celu uniemożliwienie pojawienia się ujemnych wartości sterujących silnikami. W kodzie programu, w celu rozróżnienia który sygnał PWM odpowiada któremu silnikowi, użyto następujących oznaczeń: f-front (silnik przedni), b-back(silnik tylny), l-left(silnik lewy), r-right(silnik prawy), zatem sygnał pwm\_fr jest odpowiedzialny za sterowanie przednim prawym silnikiem kwadrokoptera itd. Jak widać na powyższym listingu, sygnały pwm generowane są w trzech etapach:
 \begin{itemize}
 	\item Obliczenie wstępnej wartości sygnału zgodnie ze wzorem przedstawionym w rozdziale ?
 	\item Sprawdzenie czy sygnał pwm nie wykroczył poza dopuszczalny przedział (0,32767)
@@ -604,7 +606,7 @@ Zgodnie z notą katalogową mikrokontrolera ATmega328p, częstotliwość generow
 \end{equation}
 gdzie N to wartość dzielnika częstotliwości zegarowej przyjmująca jedną z wartości: (1,8,64,256,1024)
  
-Zatem przy taktowaniu mikrokontrolera zegarem o częstotliwości 16MHz i wybraniu dzielnika o wartości 64, generowany sygnał będzie miał częstotliwość w okolicach 500Hz, dzięki czemu będzie spełniał założenia objętego standardu. 
+Zatem przy taktowaniu mikrokontrolera zegarem o częstotliwości 16MHz i wybraniu dzielnika o wartości 64, generowany sygnał będzie miał częstotliwość w okolicach 500Hz, dzięki czemu będzie spełniał założenia przyjętego standardu. 
 
 Dla Timera1 wartość wzoru na częstotliwość sygnału PWM wraz z możliwymi wartościami dzielnika sygnału taktującego jest analogiczna.
 
@@ -618,7 +620,7 @@ void gpio_init(void)
 }
 \end{lstlisting}
 
-Samo włączenie Timera0 oraz Timera1 nie daje pewności czy sygnały PWM będą generowane na wyjściach układu, ponieważ wymagana jest jeszcze odpowiednia inicjalizacja pinów mikrokontrolera. Powyższy listing przedstawia funkcję, użytą do inicjalizacji wyprowadzeń PD5, PD6, PB1 oraz PB2  mikrokontrolera wykorzystywanych następnie przez Timer0 oraz Timer1 jako wyjścia sygnałów PWM. 
+Samo włączenie Timera0 oraz Timera1 nie daje pewności czy sygnały PWM będą generowane na wyjściach układu, ponieważ wymagana jest jeszcze odpowiednia inicjalizacja pinów mikrokontrolera. Powyższy listing przedstawia funkcję, użytą do inicjalizacji wyprowadzeń PD5, PD6, PB1 oraz PB2 mikrokontrolera, wykorzystywanych następnie przez Timer0 oraz Timer1 jako wyjścia sygnałów PWM. 
 
 \begin{lstlisting}
 void timer0_init(void)
@@ -659,17 +661,17 @@ void pwm_set(uint8_t fl, uint8_t fr, uint8_t bl, uint8_t br)
 Po prawidłowym zainicjalizowaniu wyjść mikrokontrolera oraz timerów używanych do generowania sygnałów sterujących, do zmiany ich współczynnika wypełnienia używa się funkcji pwm\_set przedstawionej na powyższym listingu. Jako parametry wejściowe przyjmuje ona cztery 8-bitowe wartości sygnałów PWM, które następnie wpisuje do odpowiednich rejestrów Timera0 oraz Timera1.
 
 \section{Sterownik silnika}
-
-Sterownik silnika został wykonany w oparciu o mikrokontroler ATiny85. Z sasobów tego mikrokontrolera wykorzystano dwa timery - Timer0 służący do generowania sygnału PWM sterującego silnikiem, oraz Timer1 który wraz z zewnętrznym żądaniem przerwania służy do pomiaru długości odebranego impulsu sterującego.
+\subsection{Funkcje programowe}
+Sterownik silnika został wykonany w oparciu o mikrokontroler ATiny85. Z zasobów tego mikrokontrolera wykorzystano dwa timery - Timer0 służący do generowania sygnału PWM sterującego silnikiem, oraz Timer1, który wraz z zewnętrznym żądaniem przerwania służy do pomiaru długości odebranego impulsu sterującego.
 
 Kontroler silnika odpowiedzialny jest za trzy zadania:
 \begin{itemize}
-	\item Odbiór sygnałów sterujących
-	\item Uśrednianie wartości sygnałów sterujących
-	\item Generowanie sygnałów PWM
+	\item Odbiór sygnałów sterujących.
+	\item Uśrednianie wartości sygnałów sterujących.
+	\item Generowanie sygnałów PWM.
 \end{itemize}
 
-Algorytm działania sterownika jest bardzo prosty i opiera się na włączeniu zewnętrznego żądania przerwania aktywowanego smianą stanu logicznego odbieranego sygnału sterującego. W przypadku wywołania zewnetrznego przerwania, procedura przerwania sprawdza czy nastąpił początek impulsu sterującego czy jego koniec próbkując poziom logiczny linii PB2. W zależności od zaistniałej sytuacji timer przeznaczony do mierzenia czasu trwania impulsu jest uruchamiany lub zatrzymywany oraz ustawiana jest odpowiednia flaga dla programu głównego. Na podstawie jej wartości program główny decyduje czy można wygenerować nową wartość sygnału sterującego silnikiem.
+Algorytm działania sterownika jest bardzo prosty i opiera się na włączeniu zewnętrznego żądania przerwania aktywowanego smianą stanu logicznego odbieranego sygnału sterującego. W przypadku wywołania zewnętrznego przerwania, procedura przerwania sprawdza czy czy jest to początek czy koniec impulsu sterującego, próbkując poziom logiczny linii PB2. W zależności od zaistniałej sytuacji timer przeznaczony do mierzenia czasu trwania impulsu jest uruchamiany lub zatrzymywany oraz ustawiana jest odpowiednia flaga dla programu głównego. Na podstawie jej wartości program główny decyduje czy, można wygenerować nową wartość sygnału sterującego silnikiem.
 
 
 \subsection{Odbiór sygnałów sterujących}
@@ -781,7 +783,7 @@ TIMER1_OVERFLOW:
 reti
 \end{lstlisting}
 
-Powyższy listing przedstawia procedurę przepełnienia timera mierzącego czas trwania impulsów sterujących. Jak było to wcześniej wspomniane impuls o maksymalnej długości równej 2ms spowoduje zliczenie przez timer 500 cykli. Dlatego też przerwanie to przy każdym wywołaniu zwiększa licznik przepełnień timera, dzięki czemu program główny będzie mógł określić czas trwania odebranego impulsu. Jako że pin mikrokontrolera odpowiedzialny za odbiór sygnałów sterujących ma włączony rezystor podciągający, procedura jest w stanie wykryć sytuację odłączenia przewodu, którym podawany jest sygnał sterujący. W takim wypadku na linii PB2 zapanuje na stałe stan wysoki, co spowoduje włączenie Timera1 przez procedurę zewnętrznego przerwania i jego ciągłe zliczanie czasu trwania impulsu. Dzięki warunkowi, który sprawdza czy timer nie przepełnił się 255 razy sytuacja taka zostanie rozpoznana jako błąd systemu, i odpowiednia flaga zostanie ustawiona na potrzeby wykorzystania przez program główny. 
+Powyższy listing przedstawia procedurę przepełnienia timera mierzącego czas trwania impulsów sterujących. Jak wspomniano wcześniej, impuls o maksymalnej długości równej 2ms spowoduje zliczenie przez timer 500 cykli. Dlatego też przerwanie to przy każdym wywołaniu zwiększa licznik przepełnień timera, dzięki czemu program główny będzie mógł określić czas trwania odebranego impulsu. Ponieważ pin mikrokontrolera odpowiedzialny za odbiór sygnałów sterujących ma włączony rezystor podciągający, procedura jest w stanie wykryć sytuację odłączenia przewodu, którym podawany jest sygnał sterujący. W takim wypadku na linii PB2 zapanuje na stałe stan wysoki, co spowoduje włączenie Timera1 przez procedurę zewnętrznego przerwania i jego ciągłe zliczanie czasu trwania impulsu. Dzięki warunkowi, który sprawdza czy timer nie przepełnił się 255 razy, sytuacja taka zostanie rozpoznana jako błąd systemu, i odpowiednia flaga zostanie ustawiona na potrzeby wykorzystania przez program główny.
 
 
 
@@ -840,7 +842,7 @@ AVERAGE_PULSE_LENGTHS:
 ret
 \end{lstlisting}
 
-Powyższy listing przedstawia procedurę uśredniającą wartości ośmiu ostatnich wartości sygnału sterującego i zapisującą ją w pamięci RAM dla dalszego wykorzystania przez program główny i procedury generujące sygnał PWM sterujący silnikiem.
+Powyższy listing przedstawia procedurę uśredniającą wartości ośmiu ostatnich wartości sygnału sterującego i zapisującą wynik w pamięci RAM dla dalszego wykorzystania przez program główny i procedury generujące sygnał PWM sterujący silnikiem.
 
 \subsection{Generacja sygnałów PWM}
 
@@ -859,7 +861,7 @@ TIMER0_INIT:
 ret
 \end{lstlisting}
 
-Powyższy listing przedstawia procedurę inicjalizującą Timer0, ustawiając go w tryb pracy PWM z korekcją fazy. (bibliografia) Preskaler ustawiony na wartość 8 sprawia że generowany sygnał PWM ma częstotliwość około 2kHZ - wartość ta została dobrana metodą prób i błędów tak aby możliwe było najlepsze sterowanie silnikiem. 
+Powyższy listing przedstawia procedurę inicjalizującą Timer0, ustawiając go w tryb pracy PWM z korekcją fazy. (bibliografia) Preskaler ustawiony na wartość 8, sprawia że generowany sygnał PWM ma częstotliwość około 2kHZ - wartość ta została dobrana metodą prób i błędów tak, aby możliwe było najlepsze sterowanie silnikiem. 
 
 \begin{lstlisting}
 SETUP_PWM:
@@ -870,7 +872,7 @@ SETUP_PWM_END:
 ret
 \end{lstlisting}
 
-Powyższy listing przedstawia procedurę używaną do zmiany współczynnika wypełnienia sygnałów PWM sterującego silnikiem oraz podłączonego do debugowej diody LED.
+Powyższy listing przedstawia procedurę używaną do zmiany współczynnika wypełnienia sygnału PWM sterującego silnikiem oraz sygnału podłączonego do debugowej diody LED.
 
 \begin{lstlisting}
 //=============MAIN==================
@@ -940,11 +942,11 @@ rjmp MAIN_LOOP
 //===================================
 \end{lstlisting}
 
-Powyższy listing przedstawia kod głównej pętli programu. Jak widać zasada jego działania opiera się na sprawdzaniu flag ustawianych przez odpowiednie przerwania informujących o odebraniu impulsu sterującego lub o wystąpieniu błędu w jego odbiorze. W przypadku odebrania impulsu następuje zapis jego wartości do tablicy, uśrednienie ośmiu ostatnich pomiarów i modyfikacja sygnału PWM sterującego silnikiem. W przypadku wystąpienia błędu w odbiorze sygnału pętla główna stopniowo wygasza sygnał PWM sterujący silnikiem przez wpisywanie wartości zerowych do kolejnych pól bufora cyklicznego przechowującego osiem ostatnich wartości sygnału sterującego. Rozwiązanie to ma na celu uniknięcie gwałtownych zmian współczynnika wypełnienia sygnału sterującego silnikiem, które mogłyby powodować uszkodzenia silnika lub mikrokontrolera ATtiny85.
+Powyższy listing przedstawia kod głównej pętli programu. Jak widać zasada jego działania opiera się na sprawdzaniu flag ustawianych przez odpowiednie przerwania, informujących o odebraniu impulsu sterującego lub o wystąpieniu błędu w jego odbiorze. W przypadku odebrania impulsu następuje zapis jego wartości do tablicy, uśrednienie ośmiu ostatnich pomiarów i modyfikacja sygnału PWM sterującego silnikiem. W przypadku wystąpienia błędu w odbiorze sygnału pętla główna stopniowo wygasza sygnał PWM sterujący silnikiem przez wpisywanie wartości zerowych do kolejnych pól bufora cyklicznego przechowującego osiem ostatnich wartości sygnału sterującego. Rozwiązanie to ma na celu uniknięcie gwałtownych zmian współczynnika wypełnienia sygnału sterującego silnikiem, które mogłyby powodować uszkodzenia silnika lub mikrokontrolera ATtiny85.
 
 \section{Interface użytkownika do strojenia parametrów lotu}
 
-Jako że aplikacja służąca do strojenia parametrów lotu kwadrokoptera nie jest przedmiotem projektu kwadrokoptera, podrozdział ten nie będzie skupiać się samej implementacji lecz na omówieniu funkcji jaką spełnia w systemie oraz przedstawieniu możliwości udostępnianych użytkownikowi. 
+Aplikacja służąca do strojenia parametrów lotu kwadrokoptera nie jest przedmiotem projektu kwadrokoptera, podrozdział ten nie będzie więc skupiać się na samej implementacji, lecz na omówieniu funkcji, jaką spełnia ona w systemie oraz przedstawieniu możliwości udostępnianych użytkownikowi. 
 
 Podstawowym zadaniem omawianej aplikacji jest udostępnianie użytkownikowi systemu prostego sposobu konfiguracji dowolnych rejestrów wewnętrznych kwadrokoptera, odczytywanie komunikatów wysyłanych przez aplikację kontrolera lotu oraz przedstawianie w postaci graficznej wartości odczytywanych z żyroskopu i akcelerometru w celu prostego sprawdzenia poprawności działania algorytmu stabilizacji i kontroli lotu.
 
@@ -954,7 +956,7 @@ Aplikacja korzysta z modułu Bluetooth obecnego w komputerze użytkownika, widzi
 	\centering
 	\includegraphics[scale=0.4]{Pictures/QuadroTune/QuadroTuneSerialSettings.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia portu szeregowego]{Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia portu szeregowego}
+	\caption[Aplikacja użytkownika do strojenia parametrów lotu - ustawienia portu szeregowego]{Aplikacja użytkownika do strojenia parametrów lotu - ustawienia portu szeregowego}
 	\label{fig:QuadroTune_screen1}
 \end{figure}
 
@@ -964,22 +966,23 @@ Rysunek ~\ref{fig:QuadroTune_screen1} przedstawia ekran służący do konfigurac
 	\centering
 	\includegraphics[scale=0.4]{Pictures/QuadroTune/QuadroTuneSettings.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia rejestrów kwadrokoptera]{Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia rejestrów kwadrokoptera}
+	\caption[Aplikacja użytkownika do strojenia parametrów lotu - ustawienia rejestrów kwadrokoptera]{Aplikacja użytkownika do strojenia parametrów lotu - ustawienia rejestrów kwadrokoptera}
 	\label{fig:QuadroTune_screen2}
 \end{figure}
 
-Rysunek ~\ref{fig:QuadroTune_screen2} przedstawia okno służące do zapisu rejestrów wewnętrznych kwadrokoptera. W lewej części okna widać dwa pola opisane jako ''Command1'' oraz ''Command2'' w których użytkownik wpisuje komendy jakie mają zostać wysłane. Komendy powinny być wpisywane zgodnie z omówionym wcześniej protokołem komuniacyjnym, używanym do komunikacji z kwadrokopterem, jednakże dla wygody uzytkowania wszystkie pola ramki uzupełnia się w trybie tekstowym a aplikacja przetwarza tę postać na wartości binarne. Dla przykładu, gdy użytkownik chce zapisać trzy rejestry wewnętrzne kwadrokoptera począwszy od rejestru o adresie 1 wartościami 156, 10 i 250 musi on wpisać w polę ''Command1'' lub ''Command2'' następujący ciąg znaków:
+Rysunek ~\ref{fig:QuadroTune_screen2} przedstawia okno służące do zapisu rejestrów wewnętrznych kwadrokoptera. W lewej części okna widać dwa pola opisane jako ''Command1'' oraz ''Command2'', w których użytkownik wpisuje komendy jakie mają zostać wysłane. Komendy powinny być wpisywane zgodnie z omówionym wcześniej protokołem, używanym do komunikacji z kwadrokopterem, jednakże dla wygody uzytkowania wszystkie pola ramki uzupełnia się w trybie tekstowym, a aplikacja przetwarza tę postać na wartości binarne. Dla przykładu, gdy użytkownik chce zapisać trzy rejestry wewnętrzne kwadrokoptera począwszy od rejestru o adresie 1 wartościami 156, 10 i 250 musi on wpisać w polę ''Command1'' lub ''Command2'' następujący ciąg znaków:
 
 w,1,3,156,10,250
 
 gdzie:
-w - oznacza komendę zapisu rejestrów
-1 - oznacza adres pierwszego zapisywanego rejestru
-3 - oznacza liczbę zapisywanych rejestrów
-156 - oznacza wartość pierwszego zapisywanego rejestru  
-10 - oznacza wartość drugiego zapisywanego rejestru
-250 - oznacza wartość trzeciego zapisywanego rejestru
-
+\begin{itemize}
+	\item w - oznacza komendę zapisu rejestrów.
+	\item 1 - oznacza adres pierwszego zapisywanego rejestru.
+	\item 3 - oznacza liczbę zapisywanych rejestrów.
+	\item 156 - oznacza wartość pierwszego zapisywanego rejestru.
+	\item 10 - oznacza wartość drugiego zapisywanego rejestru.
+	\item 250 - oznacza wartość trzeciego zapisywanego rejestru.
+\end{itemize}
 Poszczególne pola wiadomości oddzielone są przecinkiem.
 
 Analogicznie przy chęci odczytu 5 rejestrów począwszy od rejestru o adresie 7 użytkownik powinien wpisać nastepującą komendę:
@@ -987,43 +990,44 @@ Analogicznie przy chęci odczytu 5 rejestrów począwszy od rejestru o adresie 7
 r,2,7,5
 
 gdzie:
-r - oznacza komendę odczytu rejestrów
-2 - oznacza długość pola danych wiadomości w bajtach
-7 - oznacza adres pierwszego rejestru do odczytu
-5 - oznacza liczbę rejestrów do odczytu
-
-Dane wysyłane przez użytkownika w stronę kwadrokptera pokazują się w oknie po lewej stronie ekranu, natomiast dane wysłane przez kwadrokopter  otrzymane przez aplikacje w oknie po prawej stronie ekranu. Przyciski ''Clear Tx Text'' oraz ''Clear Rx Text'' służą do czyszczenia tekstu odpowiednio w lewym i prawym oknie wiadomości. 
+\begin{itemize}
+	\item r - oznacza komendę odczytu rejestrów.
+	\item 2 - oznacza długość pola danych wiadomości w bajtach.
+	\item 7 - oznacza adres pierwszego rejestru do odczytu.
+	\item 5 - oznacza liczbę rejestrów do odczytu.
+\end{itemize}
+Dane wysyłane przez użytkownika w stronę kwadrokoptera pokazują się w oknie po lewej stronie ekranu, natomiast dane wysłane przez kwadrokopter  otrzymane przez aplikacje w oknie po prawej stronie ekranu. Przyciski ''Clear Tx Text'' oraz ''Clear Rx Text'' służą do czyszczenia tekstu odpowiednio w lewym i prawym oknie wiadomości. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{Pictures/QuadroTune/QuadroTuneGraph.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia regulatorów PID]{Aplikacja użytkownika do strojenia parametrów lotu - Ustawienia Regulatorów PID}
+	\caption[Aplikacja użytkownika do strojenia parametrów lotu - ustawienia regulatorów PID]{Aplikacja użytkownika do strojenia parametrów lotu - ustawienia regulatorów PID}
 	\label{fig:QuadroTune_screen3}
 \end{figure}
 
-Rysunek ~\ref{fig:QuadroTune_screen3} przedstawia główne okno służące do strojenia regulatorów PID używanych przez algorytm stabilizacji lotu oraz do przedstawiania odczytów z żyroskopu umieszczonego w kwadrokopterze jak również wartości wyjściowych z regulatorów PID w postaci graficznej.
+Rysunek ~\ref{fig:QuadroTune_screen3} przedstawia główne okno służące do strojenia regulatorów PID używanych przez algorytm stabilizacji lotu oraz do przedstawiania odczytów z żyroskopu umieszczonego w kwadrokopterze, jak również wartości wyjściowych z regulatorów PID w postaci graficznej.
 
 W lewym górnym rogu okna widać pole wyboru nastawianego w danej chwili regulatora PID. Po wybraniu jednej z trzech możliwych wartości (PID\_X, PID\_Y, PID\_Z) aplikacja odczytuje wartości członów P, I oraz D wybranego regulatora z pamięci kwadrokoptera. Następnie po modyfikacji parametrów regulatora następuje wysłanie nowych nastaw przez wciśnięcie przycisku ''Send''. Przycisk ''Save'' powoduje wysłanie do kwadrokoptera komendy zapisującej obecne nastawy wszystkich regulatorów PID w pamięci EEPROM kontrolera lotu. Poniżej części odpowiedzialnej za konfigurację regulatorów PID, znajdują się pola służące do włączania i wyłączania całego wykresu oraz do wybierania, które jego składniki (wartości pomairów żyroskopu, wartości wyjściowe regulatorów PID) mają być widoczne dla użytkownika. Poniżej widać trzy suwaki, służące do płynnej zmiany zadanej wartości ciągu silników oraz prędkości przechylenia i wychylenia. Są one używane do testów i ustawiania parametrów regulatorów PID odpowiedzialnych za obrót kwadrokoptera wokół osi X i Y. 
 
 
 \section{Interfejs użytkownika do kontroli lotu}
 
-Podobnie jak w przypadku aplikacji służącej to ustawiania parametrów lotu kwadrokoptera, aplikacja przeznaczona służąca do kontroli kwadrokoptera nie jest przedmiotem niniejszej pracy dyplomowej, dlatego też omówione zostanie jej działanie a nie sama implementacja.
+Podobnie jak w przypadku aplikacji służącej to ustawiania parametrów lotu kwadrokoptera, aplikacja przeznaczona służąca do kontroli kwadrokoptera nie jest przedmiotem niniejszej pracy dyplomowej, dlatego też omówione zostanie jej działanie, a nie sama implementacja.
 
 Omawiana aplikacja służy jedynie do kontroli kwadrokoptera w trakcie lotu. W związku z tym musi spełniać dwa podstawowe zadania:
 \begin{itemize}
-	\item Ustanowienie połączenia radiowego z kwadrokopterem
-	\item Przesyłanie do kwadrokoptera sygnałów sterujących jego lotem
+	\item Ustanowienie połączenia radiowego z kwadrokopterem.
+	\item Przesyłanie do kwadrokoptera sygnałów sterujących jego lotem.
 \end{itemize}
 
-Obsługa aplikacji jest bardzo prosta. Użytkownik po jej włączeniu zostaje poproszony o możliwość włączenia modułu Bluetooth, w który wyposażony jest telefon. Następnie z listy urządzeń Bluetooth widzianych przez telefon, użytkownik wybiera moduł HC-06 umieszczony w płytce kontrolera lotu. Po wybraniu odpowiedniego urządzenia użytkownik uruchamia ekran odpowiedzialny za kontrolę kwadrokoptera co inicjalizuje próbę nawiązania połączenia z kwadrokopterem. Gdy połączenie się powiedzie, użytkownik rozpoczyna sterowanie kwadrokopterem za pomocą dwóch joysticków wyświetlonych na ekranie telefonu.
+Obsługa aplikacji jest bardzo prosta. Użytkownik po jej włączeniu zostaje poproszony o możliwość włączenia modułu Bluetooth, w który wyposażony jest telefon. Następnie z listy urządzeń Bluetooth widzianych przez telefon, użytkownik wybiera moduł HC-06 umieszczony w płytce kontrolera lotu. Po wybraniu odpowiedniego urządzenia użytkownik uruchamia ekran odpowiedzialny za kontrolę kwadrokoptera, co inicjalizuje próbę nawiązania połączenia z kwadrokopterem. Gdy połączenie się powiedzie, użytkownik rozpoczyna sterowanie kwadrokopterem za pomocą dwóch joysticków wyświetlonych na ekranie telefonu.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.6]{Pictures/DroidAtScreen/droid@screen-1.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika - Ekran startory]{Aplikacja użytkownika - Ekran startowy}
+	\caption[Aplikacja użytkownika - ekran startory]{Aplikacja użytkownika - ekran startowy}
 	\label{fig:QuadroControl_screen1}
 \end{figure}
 
@@ -1033,7 +1037,7 @@ Rysunek ~\ref{fig:QuadroControl_screen1} przedstawia wygląd komunikatu ukazują
 	\centering
 	\includegraphics[scale=0.6]{Pictures/DroidAtScreen/droid@screen-2.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika - Parowanie urządzeń]{Aplikacja użytkownika - Parowanie urządzeń}
+	\caption[Aplikacja użytkownika - parowanie urządzeń]{Aplikacja użytkownika - parowanie urządzeń}
 	\label{fig:QuadroControl_screen2}
 \end{figure}
 
@@ -1047,15 +1051,15 @@ Rysunek ~\ref{fig:QuadroControl_screen2} przedstawia ekran widoczny po wyrażeni
 	\label{fig:QuadroControl_screen3}
 \end{figure}
 
-Rysunek ~\ref{fig:QuadroControl_screen3} przedstawia wygląd głównego okna aplikacji po wyborze modułu Bluetooth umieszczonego w płytce kwadrokopterze. Identyfikator wybranego urządzenia pojawił się w dolnej części ekranu. Z tego miejsca użytkownik może przejść do ekranu za pomocą którego możliwa jest kontrola kwadrokoptera.
+Rysunek ~\ref{fig:QuadroControl_screen3} przedstawia wygląd głównego okna aplikacji po wyborze modułu Bluetooth umieszczonego w płytce kwadrokopterze. Identyfikator wybranego urządzenia pojawił się w dolnej części ekranu. Z tego miejsca użytkownik może przejść do ekranu, za pomocą którego możliwa jest kontrola lotu kwadrokoptera.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.8, angle=90]{Pictures/DroidAtScreen/droid@screen-4.png}
 		%\rule{35em}{0.5pt}
-	\caption[Aplikacja użytkownika - Ekran kontroli]{Aplikacja użytkownika - Ekran kontroli}
+	\caption[Aplikacja użytkownika - ekran kontroli]{Aplikacja użytkownika - ekran kontroli}
 	\label{fig:QuadroControl_screen4}
 \end{figure}
 
-Rysunek ~\ref{fig:QuadroControl_screen4} przedstawia ekran służący do kontroli lotu kwadrokoptera. Widoczne są na nim dwa joysticki z czego joystick widoczny po lewej stronie odpowiedzialny jest za kontrolę ciągu silników (ruch joysticka góra - dół) oraz za obrót kwadrokoptera wokół osi Z (ruch joysticja lewo-prawo), natomiast joystick widoczny po prawej stronie odpowiedzialny jest za przechylenie (ruch joysticka lewo-prawo) oraz pochylenie (ruch joysticka góra-dół). W lewym górnym rogu ekranu widać przycisk ''Start'' służący do rozpoczęcia lotu kwadrokoptera oraz cztery pola wyświetlające wartości liczbowe informujące o położeniu w pionie i poziomie każdego z joyskicków, służące do celów testowych.
+Rysunek ~\ref{fig:QuadroControl_screen4} przedstawia ekran służący do kontroli lotu kwadrokoptera. Widoczne są na nim dwa joysticki, z czego joystick widoczny po lewej stronie odpowiedzialny jest za kontrolę ciągu silników (ruch joysticka góra - dół) oraz za obrót kwadrokoptera wokół osi Z (ruch joysticka lewo-prawo), natomiast joystick widoczny po prawej stronie odpowiedzialny jest za przechylenie (ruch joysticka lewo-prawo) oraz pochylenie (ruch joysticka góra-dół). W lewym górnym rogu ekranu widać przycisk ''Start'' służący do rozpoczęcia lotu kwadrokoptera oraz cztery pola wyświetlające wartości liczbowe informujące o położeniu w pionie i poziomie każdego z joyskicków, służące do celów testowych.
 
