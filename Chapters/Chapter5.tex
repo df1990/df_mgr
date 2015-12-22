@@ -89,7 +89,7 @@ Przy projektowaniu ekeltroniki kwadrokoptera główną ideą, jaka przyświecał
 \end{itemize}
 
 \subsection{Kontroler lotu}
-Kontroler lotu jest jednostką odpowiedzialną za utrzymanie kwadrokoptera w powietrzu. Jak widać na rysunku ~\ref{fig:QuadroSchematIdeowy}, komunikuje się on z modułem czujników za pomocą magistrali I\textsuperscript{2}C oraz z modułem komunikacji radiowej za pomocą interfejsu UART. Ponadto musi on generować sygnały do sterowników silników zgodne z modelarskim standardem PWM opisanym w~\ref{Chapter2} rozdziale. Wybór mikrokontrolera użytego w tym module padł na układ z rodziny AVR - ATmega328p. Poniżej przedstawiono podstawowe cechy użytego mikrokontrolera:
+Kontroler lotu jest jednostką odpowiedzialną za utrzymanie kwadrokoptera w powietrzu. Jak widać na rysunku ~\ref{fig:QuadroSchematIdeowy}, komunikuje się on z modułem czujników za pomocą magistrali I\textsuperscript{2}C oraz z modułem komunikacji radiowej za pomocą interfejsu UART. Ponadto musi on generować sygnały do sterowników silników zgodne z modelarskim standardem PWM opisanym w~\ref{Chapter2} rozdziale. Wybór mikrokontrolera użytego w tym module padł na układ z rodziny AVR - ATmega328p. Poniżej przedstawiono podstawowe cechy użytego mikrokontrolera~\cite{ds_atmega328p}:
 
 \begin{itemize}
 	\item Maksymalna częstotliwość taktowania 20MHz.
@@ -105,7 +105,7 @@ Kontroler lotu jest jednostką odpowiedzialną za utrzymanie kwadrokoptera w pow
 Jak zatem widać, układ ten spełna wszystkie wymagania stawiane przed jednostką kontroli lotu, posiadając niezbędne interfejsy komunikacyjne, odpowiednią liczbę kanałów PWM, zdolnych do generowania sygnałów dla sterowników silników oraz pojemność pamięci programu i danych pozwalającą na implementację stosunkowo złożonych algorytmów. Niskie minimalne napięcie zasilania pozwala na zasilanie tego mikrokontrolera bezpośrednio z akumulatora litowo-polimerowego, dzięki czemu można uniknąć stosowania przetwornic podwyższających napięcie.
 
 \subsection{Moduł komunikacji radiowej}
-Moduł komunikacji radiowej jest odpowiedzialny za odbieranie sygnałów sterujących wysyłanych przez użytkownika urządzenia. W projekcie zdecydowano się na transmisję danych sterujących i danych używanych do strojenia algorytmu kwadrokoptera za pomocą jednego modułu, najprościej jest więc przesyłać dane w postaci cyfrowej zgodnie z protokołem opracowanym specjalnie do tego zadania. Wybór padł na moduł HC-05 ze względu na następujące parametry:
+Moduł komunikacji radiowej jest odpowiedzialny za odbieranie sygnałów sterujących wysyłanych przez użytkownika urządzenia. W projekcie zdecydowano się na transmisję danych sterujących i danych używanych do strojenia algorytmu kwadrokoptera za pomocą jednego modułu, najprościej jest więc przesyłać dane w postaci cyfrowej zgodnie z protokołem opracowanym specjalnie do tego zadania. Wybór padł na moduł HC-05 ze względu na następujące parametry~\cite{ds_hc05}:
 
 \begin{itemize}
 	\item Napięcie zasilania 3.3V.
@@ -119,14 +119,14 @@ Moduł komunikacji radiowej jest odpowiedzialny za odbieranie sygnałów steruj�
 	\centering
 	\includegraphics[scale=0.7]{Pictures/HC-05.jpg}
 		%\rule{35em}{0.5pt}
-		\caption[Moduł Bluetooth HC-05]{Moduł Bluetooth HC-05}
+		\caption[Moduł Bluetooth HC-05]{Moduł Bluetooth HC-05~\cite{ds_hc05}}
 	\label{fig:hc-05}
 \end{figure}
 
 Dzięki tym cechom możliwe jest zasilanie modułu bezpośrednio z akumulatora litowo-polimerowego zamontowanego w kwadrokopterze oraz przeysłanie danych sterujących i kalibracyjnych za pomocą prostego protokołu.
 
 \subsection{Moduł czujników}
-Moduł czujników odpowiedzialny jest za dostarczanie informacji o rzeczywistych parametrach fizycznych (położenie kątowe, prędkość kątowa) kwadrokoptera. Obecnie na rynku można spotkać rozmaite moduły czujników przeznaczone do konstrukcji latających, oferujące akcelerometry, żyroskopy, magnetometry i barometry. Wiele z tych konstrukcji ma jednak stosunkowo wysoką cenę, a ich popularność wśród użytkowników jest niewielka. Wybór padł więc na bardzo popularny a co za tym idzie tani moduł oparty o układ scalony MPU-6050, oferujący następujące parametry:
+Moduł czujników odpowiedzialny jest za dostarczanie informacji o rzeczywistych parametrach fizycznych (położenie kątowe, prędkość kątowa) kwadrokoptera. Obecnie na rynku można spotkać rozmaite moduły czujników przeznaczone do konstrukcji latających, oferujące akcelerometry, żyroskopy, magnetometry i barometry. Wiele z tych konstrukcji ma jednak stosunkowo wysoką cenę, a ich popularność wśród użytkowników jest niewielka. Wybór padł więc na bardzo popularny a co za tym idzie tani moduł oparty o układ scalony MPU-6050, oferujący następujące parametry~\cite{ds_mpu6050, ds_mpu6050rm}:
 
 \begin{itemize}
 	\item 3-osiowy Akcelerometr i 3-osiowy żyroskop zintegrowane w jednej obudowie.
@@ -150,7 +150,7 @@ Moduł czujników odpowiedzialny jest za dostarczanie informacji o rzeczywistych
 \end{figure}
 
 \subsection{Kontrolery silników}
-Kontrolery silników odpowiedzialne są za odbieranie sygnałów sterujących wysyłanych przez kontroler lotu i przetwarzanie ich na sygnał PWM, sterujący silnikiem. Przy opracowaniu koncepcji omawianych modułów, największy nacisk położono na prostotę i niewielkie wymiary konstrukcji. Procesor użyty w kontrolerze powinien posiadać minimalnie jedno wejście cyfrowe podłączone do kontrolera lotu, oraz jedno wyjście cyfrowe generujące sygnał PWM sterujący silnikiem. Wybór padł na mikrokontroler ATtiny85 ze względu na następujące cechy:
+Kontrolery silników odpowiedzialne są za odbieranie sygnałów sterujących wysyłanych przez kontroler lotu i przetwarzanie ich na sygnał PWM, sterujący silnikiem. Przy opracowaniu koncepcji omawianych modułów, największy nacisk położono na prostotę i niewielkie wymiary konstrukcji. Procesor użyty w kontrolerze powinien posiadać minimalnie jedno wejście cyfrowe podłączone do kontrolera lotu, oraz jedno wyjście cyfrowe generujące sygnał PWM sterujący silnikiem. Wybór padł na mikrokontroler ATtiny85 ze względu na następujące cechy~\cite{ds_attiny85}:
 
 \begin{itemize}
 	\item Dwa niezależne kanały PWM.

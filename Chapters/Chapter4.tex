@@ -54,13 +54,13 @@ Wiele obecnie wykorzystywanych technologii umożliwia stworzenie bardzo czułych
 
 W ostatnich latach rozwój technologii MEMS umożliwił tworzenie czujników, które dzięki swoim niewielkim rozmiarom oraz małej masie stanowią idealne rozwiązanie dla bezzałogowych konstrukcji latających. 
 
-MEMS (ang. Micro Electro Mechanical Systems) jest terminem określającym technologię wytwarzania miniaturowych systemów elektromechanicznych, których wymiary fizyczne mieszczą się w przedziale od milimetrów do pojedynczych mikrometrów. Dzięki omawianej technologii można wykonywać rozmaite rodzaje urządzeń, od nieskomplikowanych systemów bez żadnych ruchomych elementów po bardzo złożone struktury zawierające dziesiątki ruchomych elementów sterowanych za pomocą zintegrowanych układów elektronicznych. 
+MEMS (ang. Micro Electro Mechanical Systems) jest terminem określającym technologię wytwarzania miniaturowych systemów elektromechanicznych, których wymiary fizyczne mieszczą się w przedziale od milimetrów do pojedynczych mikrometrów~\cite{mems3, mems12, mems14}. Dzięki omawianej technologii można wykonywać rozmaite rodzaje urządzeń, od nieskomplikowanych systemów bez żadnych ruchomych elementów po bardzo złożone struktury zawierające dziesiątki ruchomych elementów sterowanych za pomocą zintegrowanych układów elektronicznych. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{Pictures/microactuator.png}
 		%\rule{35em}{0.5pt}
-		\caption[Miniaturowy silnik wykonany w technologii MEMS]{Miniaturowy silnik wykonany w technologii MEMS}
+		\caption[Miniaturowy silnik wykonany w technologii MEMS]{Miniaturowy silnik wykonany w technologii MEMS~\cite{mems15}}
 	\label{fig:microactuator}
 \end{figure}
 
@@ -68,7 +68,7 @@ MEMS (ang. Micro Electro Mechanical Systems) jest terminem określającym techno
 	\centering
 	\includegraphics[scale=0.7]{Pictures/3d_accel.jpg}
 		%\rule{35em}{0.5pt}
-		\caption[Struktura trzyosiowego akcelerometru wraz ze zintegrowanymi układami elektronicznymi]{Struktura trzyosiowego akcelerometru wraz ze zintegrowanymi układami elektronicznymi}
+		\caption[Struktura trzyosiowego akcelerometru wraz ze zintegrowanymi układami elektronicznymi]{Struktura trzyosiowego akcelerometru wraz ze zintegrowanymi układami elektronicznymi~\cite{mems16}}
 	\label{fig:3d_accelerometer}
 \end{figure}
 
@@ -78,7 +78,7 @@ Do produkcji struktur MEMS, najczęściej wykorzystuje się krzem, głównie ze 
 
 \section{Akcelerometr}
 
-Istnieje wiele sposobów na stworzenie akcelerometru. Jedną z nich jest wykorzystanie materiałów piezoelektrycznych i mierzenie wytwarzanych przez nie napięć, proporcjonalnych do wartości przyspieszenia. Czujniki wykonane w tej technologii są jednak zazwyczaj stosunkowo duże i nie nadawałyby się do wykorzystania w konstrukcjach latających. Akcelerometry MEMS wykorzystują zmianę pojemności kondensatorów płaskich, będących elementem ich elektromechanicznej struktury.
+Istnieje wiele sposobów na stworzenie akcelerometru. Jedną z nich jest wykorzystanie materiałów piezoelektrycznych i mierzenie wytwarzanych przez nie napięć, proporcjonalnych do wartości przyspieszenia. Czujniki wykonane w tej technologii są jednak zazwyczaj stosunkowo duże i nie nadawałyby się do wykorzystania w konstrukcjach latających. Akcelerometry MEMS wykorzystują zmianę pojemności kondensatorów płaskich, będących elementem ich elektromechanicznej struktury~\cite{mems12}.
 
 Metoda pomiaru pojemności kondensatorów niesie ze sobą wiele zalet. Proces produkcji takich struktur jest bardzo prosty i nie wymaga dużych nakładów pracy. Dodatkowo pojemność kondensatorów złożonych z równoległych powierzchnii wyrażana wzorem:   
 
@@ -96,7 +96,7 @@ gdzie $\epsilon_0$ oznacza względną przenikalność elektryczną próżni, $\e
 	\label{fig:MEMS-Accelerometer_struct}
 \end{figure}
 
-Rysunek ~\ref{fig:MEMS-Accelerometer_struct} przedstawia budowę i zasadę działania akcelerometru MEMS. Składa się on z ruchomej masy odniesienia, zamocowanej za pomocą sprężyn do ramy pokrywającej się z układem odniesienia urządzenia. Masa odniesienia posiada okładki, które wraz z nieruchomymi okładkami zewnętrznej ramy tworzą kondensatory płaskie. Przesunięcie liniowe masy odniesienia, proporcjonalne do przyspieszenia działającego na układ może być mierzone za pomocą różnicy pojemności $C1$ i $C2$, co opisują poniższe wzory:
+Rysunek ~\ref{fig:MEMS-Accelerometer_struct} przedstawia budowę i zasadę działania akcelerometru MEMS~\cite{mems12, mems13}. Składa się on z ruchomej masy odniesienia, zamocowanej za pomocą sprężyn do ramy pokrywającej się z układem odniesienia urządzenia. Masa odniesienia posiada okładki, które wraz z nieruchomymi okładkami zewnętrznej ramy tworzą kondensatory płaskie. Przesunięcie liniowe masy odniesienia, proporcjonalne do przyspieszenia działającego na układ może być mierzone za pomocą różnicy pojemności $C1$ i $C2$, co opisują poniższe wzory~\cite{mems12}:
 
 \begin{equation}
 \begin{aligned}
@@ -131,7 +131,7 @@ Jak widać na rysunku ~\ref{fig:MEMS-Accelerometer_struct} pojemności $C_1$ ora
 	\centering
 	\includegraphics[scale=0.4]{Pictures/MEMS_accel_demod.png}
 		%\rule{35em}{0.5pt}
-		\caption[Układ elektroniczny do pomiaru różnicy pojemności kondensatorów]{a) Układ elektroniczny mierzący przyspieszenia na podstawie zmiany pojemności kondensatorów b,c,d,e) przebiegi sygnału na wyjściu wtórnika napięciowego oraz wartości napięć wyjściowych układu, dla różnych wartości przyspieszeń }
+		\caption[Układ elektroniczny do pomiaru różnicy pojemności kondensatorów]{a) Układ elektroniczny mierzący przyspieszenia na podstawie zmiany pojemności kondensatorów b,c,d,e) przebiegi sygnału na wyjściu wtórnika napięciowego oraz wartości napięć wyjściowych układu, dla różnych wartości przyspieszeń~\cite{mems12, mems13}}
 	\label{fig:MEMS_accel_demod}
 \end{figure}
 
@@ -148,7 +148,7 @@ V_x = V_0\frac{C_2 - C_1}{C_2 + C_1} = \frac{x}{d}V_0
 \label{vx_to_x}
 \end{equation}
 
-zatem $V_x$ jest również przebiegiem prostokątnym, o amplitudzie proporcjonalnej do liniowego przesunięcia masy odniesienia. Sygnał ten jest jednak bardzo słaby, dlatego też trafia dalej do układu, który go wzmacnia (w przypadku układu z rysunku ~\ref{fig:MEMS_accel_demod} -  jest to zwykły wtórnik napięciowy) a następnie trafia do demodulatora wraz z jednym z sygnałów oscylatora. Na wyjściu demodulatora można już zaobserwować sygnał, którego wartość jest proporcjonalna do przyspieszenia. Ostatnim z czynników, który musi być brany pod uwagę podczas wyznaczania przyspieszenia za pomocą tego typu czujnika są sprężyny, którymi masa odniesienia zamocowana jest do zewnętrznej ramy. Na podstawie prawa Hooke'a wiadomo, że zmiana długości sprężyny $x$ jest proporcjonalna do zewnętrznej siły $F_s$ która na nią działa. Łącząc prawo Hooke'a z drugą zasadą dynamiki Newtona, można zapisać następujące równanie, opisujące zależność między przemieszczeniem $x$ masy odniesienia akcelerometru a przyspieszeniem, które na nią działa:
+zatem $V_x$ jest również przebiegiem prostokątnym, o amplitudzie proporcjonalnej do liniowego przesunięcia masy odniesienia. Sygnał ten jest jednak bardzo słaby, dlatego też trafia dalej do układu, który go wzmacnia (w przypadku układu z rysunku ~\ref{fig:MEMS_accel_demod} -  jest to zwykły wtórnik napięciowy) a następnie trafia do demodulatora wraz z jednym z sygnałów oscylatora. Na wyjściu demodulatora można już zaobserwować sygnał, którego wartość jest proporcjonalna do przyspieszenia. Ostatnim z czynników, który musi być brany pod uwagę podczas wyznaczania przyspieszenia za pomocą tego typu czujnika są sprężyny, którymi masa odniesienia zamocowana jest do zewnętrznej ramy. Na podstawie prawa Hooke'a wiadomo, że zmiana długości sprężyny $x$ jest proporcjonalna do zewnętrznej siły $F_s$ która na nią działa. Łącząc prawo Hooke'a z drugą zasadą dynamiki Newtona, można zapisać następujące równanie, opisujące zależność między przemieszczeniem $x$ masy odniesienia akcelerometru a przyspieszeniem, które na nią działa~\cite{mems12}:
 
 \begin{equation}
 	a = \frac{k_s}{m}x
@@ -162,7 +162,7 @@ gdzie $a$ to wartość przyspieszenia, $k_s$ to współczynnik sprężystości s
 
 \section{Żyroskop}
 
-Żyroskop służy pomiaru prędkości obrotowej. Ponieważ stabilizacja lotu kwadrokoptera w najprostszej postaci polega na utrzymaniu stałej prędkości kątowej wokół każdej z trzech osi, żyroskop jest kluczowym czujnikiem, w jaki wyposaża się kwadrokopter. 
+Żyroskop służy pomiaru prędkości obrotowej. Ponieważ stabilizacja lotu kwadrokoptera w najprostszej postaci polega na utrzymaniu stałej prędkości kątowej wokół każdej z trzech osi, żyroskop jest kluczowym czujnikiem, w jaki wyposaża się kwadrokopter\cite{quadro9, quadro16}. 
 
 Żyroskopy MEMS należą do grupy żyroskopów z wibrującą strukturą, mierzących prędkość kątową dzięki sile Coriolisa. W wyniku jej działania ciało, (w żyroskopach jest to z reguły odpowiednio przygotowana miniaturowa płytka krzemu) wprawione w wibracje w określonej płaszczyźnie będzie dążyć do utrzymania wibracji w tej płaszczyźnie mimo obrotu ramy, do której ciało to jest przymocowane. Chcąc uświadomić sobie, jak innowacyjna jest to konstrukcja, warto najpierw omówić dwa najbardziej popularne typy żyroskopów - żyroskop mechaniczny oraz żyroskop laserowy.
 
@@ -170,11 +170,11 @@ gdzie $a$ to wartość przyspieszenia, $k_s$ to współczynnik sprężystości s
 	\centering
 	\includegraphics[width=0.6\textwidth]{Pictures/Gyroscope_Theory.jpg}
 	%\rule{35em}{0.5pt}
-	\caption[Przykład żyroskopu mechanicznego]{Przykład żyroskopu mechanicznego}
+	\caption[Przykład żyroskopu mechanicznego]{Przykład żyroskopu mechanicznego~\cite{mems10}}
 	\label{fig:Gyroscope_Theory}
 \end{figure}
 
-Rysunek ~\ref{fig:Gyroscope_Theory} przedstawia przykładową budowę żyroskopu mechanicznego. Głównym elementem jest dysk wirujący z dużą prędkością, który utrzymuje stałe położenie kątowe. Osadzony jest w ramie, zazwyczaj w formie trzech pierścieni, umożliwiającej jego swobodny obrót wokół trzech osi. Dzięki temu wirująca masa może zachować swoje stałe położenie kątowe względem Ziemi niezależnie od obrotu urządzenia, w którym zamontowano żyroskop. Gdy w takiej konstrukcji mechanicznej, na stykach pierścieni ramy zamontowane zostaną enkodery absolutne [odniesienie do bibliografii] będzie możliwe odczytanie położenia kątowego żyroskopu w dowolnej chwili czasu, na podstawie którego będzie można wprost określić położenie kątowe urządzenia, w którym zastosowano ten czujnik. 
+Rysunek ~\ref{fig:Gyroscope_Theory} przedstawia przykładową budowę żyroskopu mechanicznego. Głównym elementem jest dysk wirujący z dużą prędkością, który utrzymuje stałe położenie kątowe. Osadzony jest w ramie, zazwyczaj w formie trzech pierścieni, umożliwiającej jego swobodny obrót wokół trzech osi. Dzięki temu wirująca masa może zachować swoje stałe położenie kątowe względem Ziemi niezależnie od obrotu urządzenia, w którym zamontowano żyroskop. Gdy w takiej konstrukcji mechanicznej, na stykach pierścieni ramy zamontowane zostaną enkodery absolutne~\cite{mems11} będzie możliwe odczytanie położenia kątowego żyroskopu w dowolnej chwili czasu, na podstawie którego będzie można wprost określić położenie kątowe urządzenia, w którym zastosowano ten czujnik. 
 
 Zdecydowaną wadą żyroskopów mechanicznych jest ich duża masa, oraz występowanie w ich wnętrzu wirujących elementów. W celu eliminacji tych wad, opracowano nowe rodzaje żyroskopów, takie jak żyroskopy laserowe, działające w oparciu o efekt Sagnaca.
 
@@ -182,17 +182,17 @@ Zdecydowaną wadą żyroskopów mechanicznych jest ich duża masa, oraz występo
 	\centering
 	\includegraphics[scale=0.4]{Pictures/Sagnac_interferometer.png}
         %\rule{35em}{0.5pt}
-        \caption[Zasada działania żyroskopów laserowych]{Zasada działania żyroskopów laserowych}
+        \caption[Zasada działania żyroskopów laserowych]{Zasada działania żyroskopów laserowych~\cite{mems9}}
         \label{fig:300px-SagnacPhase}
 \end{figure}
 
-Rysunek ~\ref{fig:300px-SagnacPhase} przedstawia zasasdę działania żyroskopu laserowego, zwanego również interferometrem Sagnaca. Promień światła rostaje rodzielony na dwie wiązki, które następnie przebywają tę samą drogę w przeciwnych kierunkach. W wyniku ruchu obrotowego urządzenia, powstaje subtelna różnica w fazie między dwoma wiązkami, którą następnie można zauważyć w postaci prążków interfencyjnych. Żyroskopy wykorzystujące efekt Sagnaca należą do grupy bardzo precyzyjnych czujników, częściowo ze względu na swoją niewrażliwość na przyspieszenia liniowe oraz wibracje. Z tego względu stosuje się je głównie z aplikacjach lotniczych (samoloty pasażerskie), militarnych (zdalnie naprowadzane rakiety), oraz astronautycznych (międzynarodowa stacja kosmiczna). 
+Rysunek ~\ref{fig:300px-SagnacPhase} przedstawia zasasdę działania żyroskopu laserowego, zwanego również interferometrem Sagnaca. Promień światła rostaje rodzielony na dwie wiązki, które następnie przebywają tę samą drogę w przeciwnych kierunkach. W wyniku ruchu obrotowego urządzenia, powstaje subtelna różnica w fazie między dwoma wiązkami, którą następnie można zauważyć w postaci prążków interfencyjnych. Żyroskopy wykorzystujące efekt Sagnaca należą do grupy bardzo precyzyjnych czujników, częściowo ze względu na swoją niewrażliwość na przyspieszenia liniowe oraz wibracje. Z tego względu stosuje się je głównie z aplikacjach lotniczych (samoloty pasażerskie), militarnych (zdalnie naprowadzane rakiety), oraz astronautycznych (międzynarodowa stacja kosmiczna)~\cite{mems7, mems8}. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{Pictures/3d_laser_ring_gyro.jpg}
         %\rule{35em}{0.5pt}
-        \caption[Trzyosiowy żyroskop laserowy]{Trzyosiowy żyroskop laserowy}
+        \caption[Trzyosiowy żyroskop laserowy]{Trzyosiowy żyroskop laserowy~\cite{mems7}}
         \label{fig:3d_laser_ring_gyro}
 \end{figure}
 
@@ -203,7 +203,7 @@ Jak już wcześniej wspomniano, żyroskopy MEMS korzystają z zupełnie innych z
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{Pictures/3d_gyro.png}
-        \caption[Trzyosiowy żyroskop MEMS]{Trzyosiowy żyroskop MEMS}
+        \caption[Trzyosiowy żyroskop MEMS]{Trzyosiowy żyroskop MEMS~\cite{mems6}}
         \label{fig:3d_gyro}
 \end{figure}
 
@@ -221,7 +221,7 @@ Inercyjny zespół pomiarowy (ang. IMU - Inertial Measurement Unit) jest to zbi�
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{Pictures/IMU.png}
-        \caption[Struktura inercjalnego zespołu pomiarowego]{Struktura inercjalnego zespołu pomiarowego MPU-6050}
+        \caption[Struktura inercjalnego zespołu pomiarowego]{Struktura inercjalnego zespołu pomiarowego MPU-6050~\cite{ds_mpu6050}}
         \label{fig:IMU}
 \end{figure}
 
