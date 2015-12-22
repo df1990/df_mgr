@@ -11,17 +11,17 @@
 %----------------------------------------------------------------------------------------
 
 \section{Zasada działania}
-Kwadrokopter zaliczany jest do rodziny śmigłowców, czyli statków powietrznych wytwarzających siłę nośną dzięki ruchowi obrotowemu wirników (rys.~\ref{fig:quadrotor_clasification.png})  [wikipedia, 6.pdf, 8.pdf[4] str 172]. Kwadrokoptery różnią się nieco od konstrukcji klasycznego helikoptera - posiadają cztery wirniki umieszczone poziomo, które wirują parami w przeciwne strony (dwa wirniki zgodnie z ruchem wskazówek zegara, dwa przeciwnie do ruchu wskazówek zegara). Dzięki obrotom śmigieł w przeciwnych kierunkach momenty bezwładności, próbujące obrócić kwadrokopter wokół własnej osi znoszą się, a co za tym idzie w tego typu konstrukcjach nie trzeba stosować wirnika ogonowego. Pociąga to za sobą w konsekwencji bardzo prostą konstrukcję mechaniczną oraz lepszą w porównaniu do helikopterów manewrowość. 
+Kwadrokopter zaliczany jest do rodziny śmigłowców, czyli statków powietrznych wytwarzających siłę nośną dzięki ruchowi obrotowemu wirników (rys.~\ref{fig:quadrotor_clasification.png}). Kwadrokoptery różnią się nieco od konstrukcji klasycznego helikoptera - posiadają cztery wirniki umieszczone poziomo, które wirują parami w przeciwne strony (dwa wirniki zgodnie z ruchem wskazówek zegara, dwa przeciwnie do ruchu wskazówek zegara). Dzięki obrotom śmigieł w przeciwnych kierunkach momenty bezwładności, próbujące obrócić kwadrokopter wokół własnej osi znoszą się, a co za tym idzie w tego typu konstrukcjach nie trzeba stosować wirnika ogonowego. Pociąga to za sobą w konsekwencji bardzo prostą konstrukcję mechaniczną oraz lepszą w porównaniu do helikopterów manewrowość~\cite{quadro1}. 
 
 \begin{figure}[htbp]
 	\centering
 		\includegraphics[width=0.8\textwidth]{Pictures/quadrotor_clasification2.png}
 		%\rule{35em}{0.5pt}
-		\caption[Klasyfikacja statków powietrznych]{Klasyfikacje statków powietrznych}
+		\caption[Klasyfikacja statków powietrznych]{Klasyfikacje statków powietrznych~\cite{quadro2, quadro3}}
 		\label{fig:quadrotor_clasification.png}
 \end{figure}
 
-Do opisu ruchu i położenia kwadrokoptera wprowadza się dwa układy odniesienia: inercjalny układ odniesienia (np. układ współrzędnych pilota kwadrokoptera, zwany często układem współrzędnych Ziemi) oraz układ odniesienia kwadrokoptera [6,7,9,11]. Przy tak zdefinowanych układach odniesienia możemy określić trzy kąty (rys.~\ref{fig:quadrotor_frames.png}):
+Do opisu ruchu i położenia kwadrokoptera wprowadza się dwa układy odniesienia: inercjalny układ odniesienia (np. układ współrzędnych pilota kwadrokoptera, zwany często układem współrzędnych Ziemi) oraz układ odniesienia kwadrokoptera \cite{quadro4, quadro5}. Przy tak zdefinowanych układach odniesienia możemy określić trzy kąty (rys.~\ref{fig:quadrotor_frames.png}):
 
 \begin{itemize}
 	\item Kąt przechylenia (ang. Roll) \straightphi: jest to kąt obrotu wokół osi Xb || Xe
@@ -33,7 +33,7 @@ Do opisu ruchu i położenia kwadrokoptera wprowadza się dwa układy odniesieni
 	\centering
 		\includegraphics[width=0.7\textwidth]{Pictures/quadrotor_frames.png}
 		%\rule{35em}{0.5pt}
-		\caption[Układy odniesienia]{Układ odniesienia zewnętrznego obserwatora E (inercjalny układ odniesienia) oraz układ odniesienia kwadrokoptera B, wraz z zaznaczonymi kątami\,przechylenia\,(\straightphi), pochylenia (\straighttheta) oraz odchylenia (\textpsi) (konfiguracja ,,+'')}
+		\caption[Układy odniesienia]{Układ odniesienia zewnętrznego obserwatora E (inercjalny układ odniesienia) oraz układ odniesienia kwadrokoptera B, wraz z zaznaczonymi kątami\,przechylenia\,(\straightphi), pochylenia (\straighttheta) oraz odchylenia (\textpsi) (konfiguracja ,,+'')~\cite{quadro6}}
 	\label{fig:quadrotor_frames.png}
 \end{figure}
 
@@ -45,16 +45,16 @@ Chcąc zrozumieć w jaki sposób można osiągnąć ruch liniowy oraz obrotowy k
 	\centering
 		\includegraphics[width=0.62\textwidth]{Pictures/quadrotor_forces.png}
 		%\rule{35em}{0.5pt}
-		\caption[Siły i momenty sił działające na kwadrokopter]{Siły i momenty sił działające na kwadrokopter (konfiguracja ,,X'')}
+		\caption[Siły i momenty sił działające na kwadrokopter]{Siły i momenty sił działające na kwadrokopter (konfiguracja ,,X'')~\cite{quadro7}}
 	\label{fig:quadrotor_forces}
 \end{figure}
 
 
 Na kwadrokopter (pomijając siłę grawitacji) działają cztery siły ciągów silników $\mathnormal{f_1, f_2, f_3, f_4}$, oraz cztery momenty sił $\tau_{M_1}, \tau_{M_2}, \tau_{M_3}, \tau_{M_4}$, gdzie $\tau_{M_i}$ jest momentem reakcji silnika, spowodowawnym oporem aerodynamicznym śmigieł [odniesienia do bibliografii] . 
 Siła unosząca kwadrokopter w powietrzu jest sumą sił ciągu wszystkich silników. Dla przykładu konfiguracji kwadrokoptera, przedstawionej na rysunku~\ref{fig:quadrotor_forces} moment siły, obracający kwadrokopter wokół osi $X_b$ (powodujący przechylenie) jest wynikiem różnicy $(f_1 + f_4) - (f_2 + f_3)$, natomiast moment siły obracający kwadrokopter wokół osi $Y_b$ (powodujący pochylenie) jest wynikiem różnicy $(f_3 + f_4) - (f_1 + f_2)$. 
-Moment siły obracający kwadrokopter wokół osi $Z_b$ (powodujący odchylenie) jest wynikiem sumy $\tau_{M_1} + \tau_{M_2} + \tau_{M_3} + \tau_{M_4}$.  Zmieniając wartości tych sił i momentów można kontrolować ruch liniowy kwadrokoptera we wszystkich kierunkach jak również ruch obrotowy wokół każdej z jego osi. Warto zauważyć że siły ciągu silników oraz momenty sił działające na quadrocopter wynikają (przy założeniu że skok łopat śmigieł się nie zmienia) bezpośrednio z prędkości kątowej wirników $\mathnormal{\omega_1, \omega_2, \omega_3, \omega_4}$. Dzięki temu zmieniając jedynie prędkości obrotowe wirników, co jest bardzo proste do osiągnięcia za pomocą elektronicznych sterowników, zyskujemy pełną kontrolę nad wszystkimi sześcioma stopniami swobody kwadrokoptera.  
+Moment siły obracający kwadrokopter wokół osi $Z_b$ (powodujący odchylenie) jest wynikiem sumy $\tau_{M_1} + \tau_{M_2} + \tau_{M_3} + \tau_{M_4}$.  Zmieniając wartości tych sił i momentów można kontrolować ruch liniowy kwadrokoptera we wszystkich kierunkach jak również ruch obrotowy wokół każdej z jego osi. Warto zauważyć że siły ciągu silników oraz momenty sił działające na quadrocopter wynikają (przy założeniu że skok łopat śmigieł się nie zmienia) bezpośrednio z prędkości kątowej wirników $\mathnormal{\omega_1, \omega_2, \omega_3, \omega_4}$. Dzięki temu zmieniając jedynie prędkości obrotowe wirników, co jest bardzo proste do osiągnięcia za pomocą elektronicznych sterowników, zyskujemy pełną kontrolę nad wszystkimi sześcioma stopniami swobody kwadrokoptera~\cite{quadro8}.  
 
-Mając świadomość sił działających na kwadrokopter możemy napisać warunki równowagi oraz ruchu dla przykładu z rysunku~\ref{fig:quadrotor_forces}:
+Mając świadomość sił działających na kwadrokopter możemy napisać warunki równowagi oraz ruchu dla przykładu z rysunku~\ref{fig:quadrotor_forces}~\cite{quadro8, quadro9}:
 
 \begin{itemize}
 	\item \textbf{Warunek zawisu w powietrzu}\\ Równowaga sił: $f_1 = f_2 = f_3 = f_4$ oraz $\sum_{i=1}^{4} f_i = mg$ \\ Zgodność kierunków: $f_1,_2,_3,_4 \parallel mg$ \\Równowaga momentów: $(\tau_{M_1} + \tau_{M_3}) + (\tau_{M_4} + \tau_{M_2}) = 0$ 
@@ -84,7 +84,7 @@ Najciekawszym przypadkiem do rozpatrzenia jest warunek ruchu poziomego. Aby kwad
 
 Jak widać na rysunku~\ref{fig:quadrotor_drag_force.png}, w trakcie ruchu postępowego siła ciągu każdego wirnika dzieli się na dwie składowe - pionową i poziomą. Składowa pionowa ma na celu zrównoważenie siły grawitacji, natomiast składowa pozioma zapewnienia ruch w poziomie. Warto zwrócić tu uwagę, że przy ruchu poziomym kwadrokoptera należy zwiększyć ciąg silników tak, aby składowa pionowa ciągu silnika nadal równoważyła siłę grawitacji.
 
-W zależności od ustawienia wirników względem układu współrzędnych kwadrokoptera rozróżniamy jego dwie podstawowe konfiguracje - konfiguracja ''+''  oraz konfiguracja ''X'' (Odniesienia do bibliografii)
+W zależności od ustawienia wirników względem układu współrzędnych kwadrokoptera rozróżniamy jego dwie podstawowe konfiguracje - konfiguracja ''+''  oraz konfiguracja ''X''~\cite{quadro10, quadro11}
 
 \begin{figure}[htbp]
 	\centering
@@ -94,7 +94,7 @@ W zależności od ustawienia wirników względem układu współrzędnych kwadro
 	\label{fig:quadrotor_configurations.png}
 \end{figure}
 
-W przypadku konfiguracji ''+'' (Rys.~\ref{fig:quadrotor_configurations.png}) wirniki 1 oraz 2 umieszczone są na osi $Y_b$, natomiast wirniki 3 i 4 na osi $X_b $. Chcąc uzyskać ruch wzdłuż osi $X_e$ lub $Y_e$ należy zmienić prędkości obrotowe jedynie dwóch silników, podczas gdy prędkości obrotowe pozostałych dwóch pozostają bez zmian. Sprawia to, że algorytm kontrolujący ruch kwadrokoptera jest prostszy niż dla konfiguracji ''X''. W konfiguracji ''X'' każdy z wirników leży pomiędzy osiami $X_b$ i $Y_b$ kwadrokoptera. W związku z tym, ruch wzdłuż osi $X_e$ lub $Y_e$ odbywa się dzięki zmianie prędkości obrotowych wszystkich wirników jednocześnie. Sprawia to, że algorytm sterujący będzie trudniejszy w implementacji, lecz niesie ze sobą jedną zaletę - chcąc uzyskać obrót kwadrokoptera np. wokół osi $X_b$ przy konfiguracji ''X'' potrzebna będzie dwa razy mniejsza zmiana prędkości obrotowej każdego z czterech wirników niż dla konfiguracji ''+'' gdzie przy obrocie będą brały udział jedynie silniki 1 i 2. Dzięki temu konfiguracja ''X'' dużo lepiej sprawdza się w sytuacjach, gdzie silniki pracują blisko granicy maksymalnych obrotów (granicy nasycenia) [odniesienie do bibliografii].
+W przypadku konfiguracji ''+'' (Rys.~\ref{fig:quadrotor_configurations.png}) wirniki 1 oraz 2 umieszczone są na osi $Y_b$, natomiast wirniki 3 i 4 na osi $X_b $. Chcąc uzyskać ruch wzdłuż osi $X_e$ lub $Y_e$ należy zmienić prędkości obrotowe jedynie dwóch silników, podczas gdy prędkości obrotowe pozostałych dwóch pozostają bez zmian. Sprawia to, że algorytm kontrolujący ruch kwadrokoptera jest prostszy niż dla konfiguracji ''X''. W konfiguracji ''X'' każdy z wirników leży pomiędzy osiami $X_b$ i $Y_b$ kwadrokoptera. W związku z tym, ruch wzdłuż osi $X_e$ lub $Y_e$ odbywa się dzięki zmianie prędkości obrotowych wszystkich wirników jednocześnie. Sprawia to, że algorytm sterujący będzie trudniejszy w implementacji, lecz niesie ze sobą jedną zaletę - chcąc uzyskać obrót kwadrokoptera np. wokół osi $X_b$ przy konfiguracji ''X'' potrzebna będzie dwa razy mniejsza zmiana prędkości obrotowej każdego z czterech wirników niż dla konfiguracji ''+'' gdzie przy obrocie będą brały udział jedynie silniki 1 i 2. Dzięki temu konfiguracja ''X'' dużo lepiej sprawdza się w sytuacjach, gdzie silniki pracują blisko granicy maksymalnych obrotów (granicy nasycenia)~\cite{quadro11}.
 %----------------------------------------------------------------------------------------
 %	SECTION 2
 %----------------------------------------------------------------------------------------
@@ -120,15 +120,15 @@ W podstawowej konfiguracji system sterowania kwadrokopterem można podzielić na
 
 \subsection{Kontroler lotu}
 
-Kontroler lotu jest podstawowym modułem kwadrokoptera, odpowiedzialnym za stabilizację lotu oraz wykonywanie wszelkich manewrów. Składa się on zazwyczaj z mikrokontrolera wyposażonego w szeregowe lub równoległe interfejsy komunikacyjne, które umożliwiają odbieranie danych z modułu czujników oraz modułu komunikacyjnego, jak również przesyłanie danych do kontrolerów silników. Duża różnorodność obecnie dostępnych mikrokontrolerów sprawia, że można zaobserwować najrozmaitsze konstrukcje kontrolerów oparte o takie architektury jak AVR lub ARM, od własnoręcznie robionych płytek drukowanych po gotowe komputery jednopłytkowe (SBC), w tym ostatnio raspberry PI [odniesienia do bibliografii]. W dziedzinie dostepnego oprogramowania również widoczna jest duża różnorodność. Wśród najbardziej popularnych rozwiązań wyróżnić można programy dedykowane do kontroli lotu, takie jak ArduPilot (odniesienie do bibliografii), programy napisane w oparciu o proste systemy operacyjne czasu rzeczywistego (RTOS) (odniesienie do bibliografii), a także programy oparte o specjalne dystrybucje systemu LINUX (Parrot, odniesienie do bibliografii).
+Kontroler lotu jest podstawowym modułem kwadrokoptera, odpowiedzialnym za stabilizację lotu oraz wykonywanie wszelkich manewrów. Składa się on zazwyczaj z mikrokontrolera wyposażonego w szeregowe lub równoległe interfejsy komunikacyjne, które umożliwiają odbieranie danych z modułu czujników oraz modułu komunikacyjnego, jak również przesyłanie danych do kontrolerów silników. Duża różnorodność obecnie dostępnych mikrokontrolerów sprawia, że można zaobserwować najrozmaitsze konstrukcje kontrolerów oparte o takie architektury jak AVR lub ARM, od własnoręcznie robionych płytek drukowanych po gotowe komputery jednopłytkowe (SBC), w tym ostatnio raspberry PI~\cite{quadro12, quadro13}. W dziedzinie dostepnego oprogramowania również widoczna jest duża różnorodność. Wśród najbardziej popularnych rozwiązań wyróżnić można programy dedykowane do kontroli lotu, takie jak ArduPilot~\cite{quadro14}, programy napisane w oparciu o proste systemy operacyjne czasu rzeczywistego (RTOS), a także programy oparte o specjalne dystrybucje systemu LINUX~\cite{quadro15}.
 
 \subsection{Moduł czujników}
 
-Moduł czujników służy do zbierania informacji niezbędnych kontrolerowi lotu do utrzymania stabilizacji kwadrokoptera, jak również wykonywania odpowiednich manewrów. W ostatnich latach dzięki rozwojowi technologii MEMS (odniesienia do bibliografii) dostępne stały się układy scalone ze zintegrowanymi czujnikami, posiadające cyfrowe lub analogowe interfejsy komunikacyjne, zwane również IMU (ang. Inertial Measurement Unit) (odniesienie do bibliografii). W najprostszej konfiguracji układy scalone wyposażone są w trzyosiowy akcelerometr i trzyosiowy żyroskop, dzięki czemu zapewniają komplet informacji potrzebnych dla kontrolera lotu. Niektóre moduły czujników oferują również sprzętową akcelerację obliczeń (odniesienia do noty katalogowej MPU-6050), zwalniając tym samym kontroler lotu z konieczności przeliczania położenia kwadrokoptera w przestrzeni. 
+Moduł czujników służy do zbierania informacji niezbędnych kontrolerowi lotu do utrzymania stabilizacji kwadrokoptera, jak również wykonywania odpowiednich manewrów. W ostatnich latach dzięki rozwojowi technologii MEMS~\cite{mems1} dostępne stały się układy scalone ze zintegrowanymi czujnikami, posiadające cyfrowe lub analogowe interfejsy komunikacyjne, zwane również IMU (ang. Inertial Measurement Unit)~\cite{mems2}. W najprostszej konfiguracji układy scalone wyposażone są w trzyosiowy akcelerometr i trzyosiowy żyroskop, dzięki czemu zapewniają komplet informacji potrzebnych dla kontrolera lotu. Niektóre moduły czujników oferują również sprzętową akcelerację obliczeń~\cite{ds_mpu6050}, zwalniając tym samym kontroler lotu z konieczności przeliczania położenia kwadrokoptera w przestrzeni. 
 
 \subsection{Moduł komunikacyjny}
 
-Moduł komunikacyjny realizuje komunikację między pilotem a quadrokopterem. Obecnie najbardziej popularna droga komunikacji to droga radiowa lecz w tańszych konstrukcjach można spotkać jednostronną komunikację wykorzystującą promieniowanie podczerwone. Wśród prywatnych konstrukcji kwadrokopterów często można spotkać moduły radiowe pracujące w paśmie 2.4GHz lub 434MHz, wyposażone w interfejs SPI, a także znacznie prostsze w obsłudze moduły Bluetooth, których wadą jest znacznie mniejszy zasięg transmisji danych. Wśród gotowych modułów komunikacyjnych dostepnych na rynku najbardziej popularne są moduły pracujące w paśmie 2.4GHz, oferujące kilka analogowych kanałów wyjściowych z modulacją PWM (wikipedia) lub PPM (wikipedia)(http://www.endurance-rc.com/ppmtut.php). 
+Moduł komunikacyjny realizuje komunikację między pilotem a quadrokopterem. Obecnie najbardziej popularna droga komunikacji to droga radiowa lecz w tańszych konstrukcjach można spotkać jednostronną komunikację wykorzystującą promieniowanie podczerwone. Wśród prywatnych konstrukcji kwadrokopterów często można spotkać moduły radiowe pracujące w paśmie 2.4GHz lub 434MHz, wyposażone w interfejs SPI, a także znacznie prostsze w obsłudze moduły Bluetooth, których wadą jest znacznie mniejszy zasięg transmisji danych. Wśród gotowych modułów komunikacyjnych dostepnych na rynku najbardziej popularne są moduły pracujące w paśmie 2.4GHz, oferujące kilka analogowych kanałów wyjściowych z modulacją PWM lub PPM~\cite{quadro16,quadro17,quadro18,quadro19}. 
 
 \begin{figure}[H]
 	\centering
@@ -153,7 +153,7 @@ Sterowniki silników odbierają dane z kontrolera lotu i na ich podstawie utrzym
 	\centering
 		\includegraphics[width=0.7\textwidth]{Pictures/esc-motor-connect.jpg}
 		%\rule{35em}{0.5pt}
-	\caption[Przykładowy sterownik silnika bezszczotkowego]{Przykładowy sterownik silnika bezszczotkowego wraz z podłączonym silnikiem}
+	\caption[Przykładowy sterownik silnika bezszczotkowego]{Przykładowy sterownik silnika bezszczotkowego wraz z podłączonym silnikiem~\cite{quadro20}}
 	\label{fig:esc-motor-connect.jpg}
 \end{figure}
 
@@ -174,7 +174,7 @@ Konstrukcja nośna, czyli rama kwadrokoptera, stanowi platformę do mocowania ws
 	\centering
 		\includegraphics[width=0.7\textwidth]{Pictures/quadrotor_frame.jpg}
 		%\rule{35em}{0.5pt}
-	\caption[Gotowa rama do kwadrokoptera]{Gotowa rama do kwadrokoptera}
+	\caption[Gotowa rama do kwadrokoptera]{Gotowa rama do kwadrokoptera~\cite{quadro21}}
 	\label{fig:quadrotor_frame.jpg}
 \end{figure}
 
@@ -182,7 +182,7 @@ Konstrukcja nośna, czyli rama kwadrokoptera, stanowi platformę do mocowania ws
 	\centering
 		\includegraphics[width=0.7\textwidth]{Pictures/picocopter.jpg}
 		%\rule{35em}{0.5pt}
-	\caption[Rama kwadrokoptera zintegrowana z PCB]{Rama kwadrokoptera zintegrowana z PCB}
+	\caption[Rama kwadrokoptera zintegrowana z PCB]{Rama kwadrokoptera zintegrowana z PCB~\cite{quadro22}}
 	\label{fig:picocopter.jpg}
 \end{figure}
 
