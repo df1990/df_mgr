@@ -23,8 +23,8 @@ Podstawowa lista wymagań technicznych wygląda następująco:
 	\item Komunikacja radiowa o zasięgu minimum 5 metrów.
 	\item Prosta, najlepiej gotowa konstrukcja mechaniczna.
 	\item Prosta architektura elektroniki, oparta o mikrokontroler AVR.
-	\item PCB zaprojektowane własnoręcznie.
-	\item Algorytm napisany własnoręcznie.
+	\item Originalny projekt PCB.
+	\item Implementacja algorytmów sterowania w assemblerze lub w jęcyku C.
 \end{itemize}
 
 \section{Koncepcja rozwiązania}
@@ -56,7 +56,7 @@ Podejście to ma wyraźne zalety w porównaniu do kupionego lub własnoręcznie 
 \begin{itemize}
 	\item \textbf{W porównaniu do kupionego kontrolera lotu uzyskuje się:}
 		\begin{itemize}
-			\item brak konieczności dopasowywania tworzonego systemu do gotowego standardu radiowej transmisji sygnałów sterujących,
+			\item brak konieczności dopasowywania tworzonego systemu do gotowego standardu radiowej transmisji sygnałów sterujących, możliwość opracowania własnego protokołu służącego do komunikacji z kwadrokopterem transmitowanego w formie cyfrowej przez interfejs Bluetooth,
 			\item dużo niższy koszt kontrolera.
 		\end{itemize}
 	\item \textbf{W porównaniu do własnoręcznie wykonanego sprzętowego kontrolera lotu uzyskuje się:}
@@ -228,7 +228,7 @@ Rysunki ~\ref{fig:QuadrotorControllerPCB_TOP} oraz ~\ref{fig:QuadrotorController
 	\label{fig:MotorDriver_PWR}
 \end{figure}
 
-Rysunek ~\ref{fig:MotorDriver_PWR} przedstawia blok zasilania sterownika silnika. Jest on bardzo podobny do zasilania kontrolera lotu i składa się ze stablilizatora LDO o minimalnym napięciu wejściowym 3.5V, rezystora R1 łączącego masę analogową i cyfrową układu, diody informującej o obecności napięcia zasilania oraz diody sygnalizacyjnej, używanej jako wskaźnik działania programu wgranego do mikrokontrolera. Złącze P101 służy do podłączenia napięcia zasilania (piny 1 oraz 2) oraz do podłączenia sygnału PWM informującego moduł o zadanej prędkości obrotowej silnika.
+Rysunek ~\ref{fig:MotorDriver_PWR} przedstawia blok zasilania sterownika silnika. Jest on bardzo podobny do zasilania kontrolera lotu i składa się ze stablilizatora LDO o minimalnym napięciu wejściowym 3.5V, rezystora R1 łączącego masę analogową i cyfrową układu, diody informującej o obecności napięcia zasilania oraz diody sygnalizacyjnej, używanej jako wskaźnik działania programu wgranego do mikrokontrolera. Złącze P101 służy do podłączenia napięcia zasilania (piny 1 oraz 2) oraz do podłączenia sygnału sterującego SIGNAL\_UC, informującego moduł o zadanej prędkości obrotowej silnika.
 
 \begin{figure}[H]
 	\centering
@@ -238,7 +238,7 @@ Rysunek ~\ref{fig:MotorDriver_PWR} przedstawia blok zasilania sterownika silnika
 	\label{fig:MotorDriver_MAIN}
 \end{figure}
 
-Rysunek ~\ref{fig:MotorDriver_MAIN} przedastawia główny schemat kontrolera silnika. Składa się on z mikrokontrolera ATtiny85 taktowanego zewnętrznym rezonatorem o częstotliwości 12MHz. Sygnał PWM pochodzący z kontrolera lotu przechodzi przez rezystor R102 tworzący z pojemnością wejścia mikrokontrolera filtr dolnoprzepustowy tłumiący część zakłóceń. Następnie trafia on na pin mikrokontrolera zdolny do generowania zewnętrznego przerwania. Z mikrokontrolera wyprowadzony jest sygnał PWM  trafiający na tranzystor Q101 sterujący silnikiem. Rezystor R105 zapobiega impulsom prądowym, które występują podczas ładowania i rozładowywania pasożytniczej pojemności bramki tranzystora, natomiast rezystor R107 wymusza niski stan na bramce tranzystora (co za tym idzie wyłączenie silnika) przy braku sygnału sterującego ze strony mikrokontroelra. Dioda Schottky'ego D1 ma za zadanie niwelowanie zakłóceń generowanych przez silnik szczotkowy podłączony do złącza P1. Sygnał CFG\_LED podłączony jest do diody D104 i służy jako wskaźnik działania programu uruchomionego na mikrokontrolerze. Złącze CON1 służy do programowania mikrokontrolera i ze względu na oszczędność miejsca na płytce drukowanej zostało zrealizowane w formie padów testowych, do których lutuje się przewody z programatora. Ze względu na możliwe duże zakłócenia występujące w obrębie tego układu, przy mikrokontrolerze zastosowano duże kondensatory filtrujące napięcie zasilania.
+Rysunek ~\ref{fig:MotorDriver_MAIN} przedastawia główny schemat kontrolera silnika. Składa się on z mikrokontrolera ATtiny85 taktowanego zewnętrznym rezonatorem o częstotliwości 12MHz. Sygnał PWM pochodzący z kontrolera lotu przechodzi przez rezystor R102 tworzący z pojemnością wejścia mikrokontrolera filtr dolnoprzepustowy tłumiący część zakłóceń. Następnie trafia on na pin mikrokontrolera zdolny do generowania zewnętrznego przerwania INT0. Z mikrokontrolera wyprowadzony jest sygnał PWM  trafiający na tranzystor Q101 sterujący silnikiem. Rezystor R105 zapobiega impulsom prądowym, które występują podczas ładowania i rozładowywania pasożytniczej pojemności bramki tranzystora, natomiast rezystor R107 wymusza niski stan na bramce tranzystora (co za tym idzie wyłączenie silnika) przy braku sygnału sterującego ze strony mikrokontroelra. Dioda Schottky'ego D1 ma za zadanie niwelowanie zakłóceń generowanych przez silnik szczotkowy podłączony do złącza P1. Sygnał CFG\_LED podłączony jest do diody D104 i służy jako wskaźnik działania programu uruchomionego na mikrokontrolerze. Złącze CON1 służy do programowania mikrokontrolera i ze względu na oszczędność miejsca na płytce drukowanej zostało zrealizowane w formie padów testowych, do których lutuje się przewody z programatora. Ze względu na możliwe duże zakłócenia występujące w obrębie tego układu, przy mikrokontrolerze zastosowano duże kondensatory filtrujące napięcie zasilania.
 
 \begin{figure}[H]
 	\centering
@@ -290,5 +290,5 @@ Po zapoznaniu się z ofertą kwadrokopterów dostepnych w Internecie wybór pad�
 
 
 
-Rysunek ~\ref{fig:Quadro_beetle3} przedstawia model od spodu. Widać na nim prostotę konstrukji nośnej kwadrokoptera - cała rama wykonana jest w postaci centralnie umieszczonego pierścienia, do którego przymocowane są cztery wsporniki śmigieł. Na końcach wsporników znajdują się koszyki zawierające silniki wraz z zębatkami oraz śmigłami. Taka konstrukcja mechaniczna pozwala na proste dodawanie własnoręcznie wykonanych pozdespołów elektronicznych (na przykład sterowników silników) i tworzenie gotowej platformy zdolnej do lotu. 
+Rysunek ~\ref{fig:Quadro_beetle3} przedstawia model od spodu. Widać na nim prostotę konstrukji nośnej kwadrokoptera - cała rama wykonana jest w postaci centralnie umieszczonego pierścienia, do którego przymocowane są cztery wsporniki śmigieł. Na końcach wsporników znajdują się koszyki zawierające silniki szczotkowe stosunkowo małej mocy, wraz z zębatkami oraz śmigłami. Taka konstrukcja mechaniczna pozwala na proste dodawanie własnoręcznie wykonanych pozdespołów elektronicznych (na przykład sterowników silników) i tworzenie gotowej platformy zdolnej do lotu. 
 
