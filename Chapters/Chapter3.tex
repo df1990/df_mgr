@@ -22,18 +22,18 @@ Rozważmy model kwadrokoptera przedstawiony na rysunku ~\ref{fig:quadrotor_force
 	\dot{\phi} &= k_r((\omega_1 + \omega_4) - (\omega_2 + \omega_3)) \\
 	\dot{\theta} &= k_p((\omega_1 + \omega_2) - (\omega_3 + \omega_4)) \\
 	\dot{\psi} &= k_y((\omega_1 + \omega_3) - (\omega_2 + \omega_4)) \\
-	F &= k_t(\omega_1 + \omega_2 + \omega_3 + \omega_4)
+	f &= k_t(\omega_1 + \omega_2 + \omega_3 + \omega_4)
 \end{aligned}
 \end{equation}
 
-gdzie $\dot{\phi}$, $\dot{\theta}$, $\dot{\psi}$ są prędkościami kątowymi odpowiednio wokół osi $X_b$, $Y_b$, $Z_b$, wypadkowa siła ciągu silników została oznaczona jako $F$, a $k_r$, $k_p$, $k_y$, $k_t$ są współczynnikami proporcjonalności zależnymi od własności fizycznych systemu. Po opuszczeniu nawiasów i uszeregownaiu zmiennych, powyższy układ równań nabiera następującej postaci:
+gdzie $\dot{\phi}$, $\dot{\theta}$, $\dot{\psi}$ są prędkościami kątowymi odpowiednio wokół osi $X_b$, $Y_b$, $Z_b$, wypadkowa siła ciągu silników została oznaczona jako $f$, a $k_r$, $k_p$, $k_y$, $k_t$ są współczynnikami proporcjonalności zależnymi od własności fizycznych systemu. Po opuszczeniu nawiasów i uszeregownaiu zmiennych, powyższy układ równań nabiera następującej postaci:
 
 \begin{equation}
 \begin{aligned}
 	\dot{\phi} &= k_r\omega_1 - k_r\omega_2 - k_r\omega_3 + k_r\omega_4 \\
 	\dot{\theta} &= k_p\omega_1 + k_p\omega_2 - k_p\omega_3 - k_p\omega_4 \\
 	\dot{\psi} &= k_y\omega_1 - k_y\omega_2 + k_y\omega_3 - k_y\omega_4 \\
-	F &= k_t\omega_1 + k_t\omega_2 + k_t\omega_3 + k_t\omega_4
+	f &= k_t\omega_1 + k_t\omega_2 + k_t\omega_3 + k_t\omega_4
 \end{aligned}
 \end{equation}
 
@@ -47,7 +47,7 @@ Przyjmując w uproszczeniu, że $k_r = k_p = k_y = k_t = k$, możemy zapisać po
 		\dot{\phi} \\
 		\dot{\theta} \\
 		\dot{\psi} \\
-		F
+		f
 	\end{pmatrix} = 
 	\begin{pmatrix}
 		k & -k & -k & k \\
@@ -114,7 +114,7 @@ Algorytm kontrolujący prędkość obrotową kwadrokoptera wokół jednej osi b�
 	\centering
 	\includegraphics[width=1.1\textwidth]{Pictures/rate_controll_algorithm2.png}
 		%\rule{35em}{0.5pt}
-		\caption[Najprostszy algorytm kontroli lotu kwadrokoptera]{Najprostrzy algorytm kontroli lotu kwadrokoptera}
+		\caption[Najprostszy algorytm kontroli lotu kwadrokoptera]{Najprostszy algorytm kontroli lotu kwadrokoptera}
 	\label{fig:rate_controll_algorithm}
 \end{figure}
 
@@ -124,7 +124,7 @@ Omawiany algorytm jest bardzo prosty w implementacji, dzięki czemu można go za
 
 \section{Algorytm kontroli położenia kątowego}
 
-Dla wielu uzytkowników brak automatycznej stabilizacji ruchu w płaszczyźnie poziomej może być uciążliwy, dlatego też warto zastanowić się co należy zrobić, aby zamiast kontroli nad przechyleniem lub wychyleniem móc kontrolować kąt przechylenia ($\phi$) lub kąt wychylenia kwadrokoptera ($\theta$). Najprostszym rozwiązaniem będzie rozszerzenie algorytmu przestawionego na rysunku ~\ref{fig:rate_controll_algorithm} tak, aby na wejściu zamiast prędkości kątowych wokół osi $X_b$ i $Y_b$ przyjmował docelowe wartości kątów przechylenia i odchylenia. Od razu w oczy rzuca się podstawowy problem: w poprzedniej wersji algorytmu, chcąc kontrolować prędkość kątową, wykorzystywano rzeczywistą wartość prędkości kątowej kwadrokoptera w pętli sprzężenia zwrotnego. Przy chęci kontrolowania kąta przechylenia lub wychylenia, rozszerzona wersja algorytmu musi wykorzystać w pętli sprzężenia zwrotnego informację o rzeczywistym kącie wychylenia lub przechylenia o jaki obrócił się kwadrokopter. Dlatego też aby omawiany algorytm miał prawo działać, należy zastanowić się, w jaki sposób można uzyskać wspomniane kąty.  
+Dla wielu uzytkowników brak automatycznej stabilizacji ruchu w płaszczyźnie poziomej może być uciążliwy, dlatego też warto zastanowić się co należy zrobić, aby zamiast kontroli nad prędkościami kątowymi wokół osi $X_b$ oraz $Y_b$ móc kontrolować kąt przechylenia ($\phi$) lub kąt wychylenia kwadrokoptera ($\theta$). Najprostszym rozwiązaniem będzie rozszerzenie algorytmu przedstawionego na rysunku ~\ref{fig:rate_controll_algorithm} tak, aby na wejściu zamiast prędkości kątowych wokół osi $X_b$ i $Y_b$ przyjmował docelowe wartości kątów przechylenia i odchylenia. Od razu w oczy rzuca się podstawowy problem: w poprzedniej wersji algorytmu, chcąc kontrolować prędkość kątową, wykorzystywano rzeczywistą wartość prędkości kątowej kwadrokoptera w pętli sprzężenia zwrotnego. Przy chęci kontrolowania kąta przechylenia lub wychylenia, rozszerzona wersja algorytmu musi wykorzystać w pętli sprzężenia zwrotnego informację o rzeczywistym kącie wychylenia lub przechylenia o jaki obrócił się kwadrokopter. Dlatego też aby omawiany algorytm miał prawo działać, należy zastanowić się, w jaki sposób można uzyskać wspomniane kąty.  
 
 Obecnie dostępne czujniki, które można zamontować na prostym modelu kwadrokoptera, nie umożliwiają bezpośredniego pomiaru kątów przechylenia i wychylenia, dlatego też trzeba będzie sięgnąć do bardziej wyrafinowanych metod, bazujących na operacjach matematycznych dokonywanych na wynikach pomiarów z czujników takich jak:
 
@@ -147,7 +147,7 @@ Wykorzystanie akcelerometru polega na odczytywaniu przyspieszeń liniowych wzdł
 
 gdzie wartości $a_x$, $a_y$, $a_z$ są wartościami przyspieszeń liniowych mierzonych wzdłuż osi odpowiednio $X_b$, $Y_b$, $Z_b$.
 
-Podane rozwiązanie nie jest jednak idealne, ponieważ akcelerometr podaje wartości przyspieszeń liniowych i sam ruch kwadrokoptera ze zmienną prędkością powoduje fałszowanie wyników. Co więcej, akcelerometr jest czujnikiem bardzo wrażliwym na wibracje, które będą powodować błąd między rzeczywistym kątem pochylenia lub przechylenia a kątem obliczonym na podstawie pomiarów.
+Podane rozwiązanie nie jest jednak idealne. Zadziałanie na kwadrokopter zewnętrznej siły (np. pudmuch wiatru) nadającej mu dodatkową wartosć przyspieszenia może powodować błędną interpretację odbieranych pomiarów przez algorytm kontroli lotu. Co więcej, akcelerometr jest czujnikiem bardzo wrażliwym na wibracje, które będą powodować błąd między rzeczywistym kątem pochylenia lub przechylenia a kątem obliczonym na podstawie pomiarów.
 
 Reasumując mamy dwie metody estymacji kąta pochylenia i przechylenia, obarczone następującymi niedoskonałościami:
 
@@ -158,7 +158,7 @@ Reasumując mamy dwie metody estymacji kąta pochylenia i przechylenia, obarczon
 		\end{itemize}
 	\item Wykorzystanie wskazań z akcelerometru i funkcji trygonometrycznych:
 		\begin{itemize}
-			\item ruch kwadrokoptera powoduje fałszowanie obliczeń.
+			\item zewnętrzne siły mogą powodować błędną interpretację pomiarów przez algorytm kontroli lotu,
 			\item duża czułość akcelerometru na wibracje powoduje niedokładność estymacji kąta.
 		\end{itemize}
 \end{itemize}
@@ -171,7 +171,7 @@ Wśród wielu znanych funkcji, które mogą zostać użyte do obliczania położ
 	\item Filtry komplementarne
 \end{itemize}
 
-Filtr Kalmana jest używany do oszacowania wektora stanu pewnego procesu (w naszym przypadku orientacji kwadrokoptera) układu dynamicznego w pętli sprzężenia zwrotnego. [odniesienia] Wykorzystuje on serię pomiarów zaburzonych szumem i przewiduje najbardziej prawdopodobny stan, w jakim znajduje się system. Jest to algorytm iteracyjny, składający się z dwóch kroków:
+Filtr Kalmana, jest to algorytm rekurencyjny, który służy do określenia stanu badanego układu dynamicznego na podstawie jego modelu matematycznego (np. równań ruchu) oraz serii pomiarów wejścia i wyjścia tego układu. Algorytm ten, składa się z dwóch kroków:
 
 \begin{itemize}
 	\item Faza predykcji - służy do określenia przewidywanego następnego stanu procesu, w oparciu o znajomość poprzedniego stanu procesu.
