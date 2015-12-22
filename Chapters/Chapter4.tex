@@ -100,8 +100,8 @@ Rysunek ~\ref{fig:MEMS-Accelerometer_struct} przedstawia budowę i zasadę dzia�
 
 \begin{equation}
 \begin{aligned}
-C1 &= \epsilon_0\epsilon_r\frac{S}{d + x} &= C_0 - \Delta{C} \\
-C2 &= \epsilon_0\epsilon_r\frac{S}{d - x} &= C_0 + \Delta{C}
+C1 &= \epsilon_0\epsilon_r\frac{S}{d + x} &= C_0 - \Delta{C_1} \\
+C2 &= \epsilon_0\epsilon_r\frac{S}{d - x} &= C_0 + \Delta{C_2}
 \end{aligned}
 \label{C_to_delta}
 \end{equation} 
@@ -109,7 +109,7 @@ C2 &= \epsilon_0\epsilon_r\frac{S}{d - x} &= C_0 + \Delta{C}
 W przypadku braku przyspieszenia działającego na układ, różnica pojemności wynosi $0$ ponieważ $x_1 = x_2$. W przypadku działania przyspieszenia, różnicę pojemności wynikającą z faktu że $x_1 \neq x_2$ można wyrazić wzorem:
 
 \begin{equation}
-	C_2 - C_1 = 2\Delta{C} = 2\epsilon_0\epsilon_rS\frac{x}{d^2 - x^2}
+	C_2 - C_1 = \Delta{C_2} + \Delta{C_1} = 2\epsilon_0\epsilon_rS\frac{x}{d^2 - x^2}
 \end{equation}
 
 Chcąc wyznaczyć przesunięcie x, należy rozwiązać równanie kwadratowe:
@@ -121,7 +121,7 @@ Chcąc wyznaczyć przesunięcie x, należy rozwiązać równanie kwadratowe:
 Równanie to można jednak uprościć, jako że dla niewielkich przesunięć człon $\Delta{C}x^2$ można pominąć. Zatem równanie kwadratowe upraszcza się do postaci:
 
 \begin{equation}
-	x \approx \frac{d^2}{\epsilon_0\epsilon_r}\Delta{C} = d\frac{\Delta{C}}{C_0}
+	x \approx \frac{d^2}{\epsilon_0\epsilon_rS}\Delta{C} = d\frac{\Delta{C}}{C_0}
 	\label{x_to_c}
 \end{equation}
 
@@ -174,7 +174,7 @@ gdzie $a$ to wartość przyspieszenia, $k_s$ to współczynnik sprężystości s
 	\label{fig:Gyroscope_Theory}
 \end{figure}
 
-Rysunek ~\ref{fig:Gyroscope_Theory} przedstawia przykładową budowę żyroskopu mechanicznego. Głównym elementem jest dysk wirujący z dużą prędkością, który utrzymuje stałe położenie kątowe. Osadzony jest w ramie, zazwyczaj w formie trzech pierścieni, umożliwiającej jego swobodny obrót wokół trzech osi. Dzięki temu wirująca masa może zachować swoje stałe położenie kątowe względem Ziemi niezależnie od obrotu urządzenia, w którym zamontowano żyroskop. Warto zauważyć, że poprzez umieszczenie enkoderów na styku pierścieni ramy, za pomocą tego typu żyroskopu można zmierzyć nie tylko prędkość kątową, ale również ukreślić położenie kątowe żyroskopu, co z punktu widzenia algorytmów kontroli jest bardzo cenną cechą tych czujników. 
+Rysunek ~\ref{fig:Gyroscope_Theory} przedstawia przykładową budowę żyroskopu mechanicznego. Głównym elementem jest dysk wirujący z dużą prędkością, który utrzymuje stałe położenie kątowe. Osadzony jest w ramie, zazwyczaj w formie trzech pierścieni, umożliwiającej jego swobodny obrót wokół trzech osi. Dzięki temu wirująca masa może zachować swoje stałe położenie kątowe względem Ziemi niezależnie od obrotu urządzenia, w którym zamontowano żyroskop. Gdy w takiej konstrukcji mechanicznej, na stykach pierścieni ramy zamontowane zostaną enkodery absolutne [odniesienie do bibliografii] będzie możliwe odczytanie położenia kątowego żyroskopu w dowolnej chwili czasu, na podstawie którego będzie można wprost określić położenie kątowe urządzenia, w którym zastosowano ten czujnik. 
 
 Zdecydowaną wadą żyroskopów mechanicznych jest ich duża masa, oraz występowanie w ich wnętrzu wirujących elementów. W celu eliminacji tych wad, opracowano nowe rodzaje żyroskopów, takie jak żyroskopy laserowe, działające w oparciu o efekt Sagnaca.
 
@@ -198,7 +198,7 @@ Rysunek ~\ref{fig:300px-SagnacPhase} przedstawia zasasdę działania żyroskopu 
 
 Rysunek ~\ref{fig:3d_laser_ring_gyro} przedstawia przykładową konstrukcję trzyosiowego żyroskopy laserowego, używanego w samolotach wojskowych oraz zdalnie naprowadzanych rakietach. 
 
-Jak już wcześniej wspomniano, żyroskopy MEMS korzystają z zupełnie innych zasad fizycznych niż żyroskopy mechaniczne i laserowe. Zasada ich działania zostanie wytłumaczona na przykładzie trzyosiowego żyroskopu, wykorzystującego odpowiednio ukształtowaną płytkę krzemu do pomiaru prędkości kątowych wokół wszystkich trzech osi jednocześnie.
+Jak już wcześniej wspomniano, żyroskopy MEMS korzystają z zupełnie innych zasad fizycznych niż żyroskopy mechaniczne i laserowe. Zasada ich działania zostanie wytłumaczona na przykładzie trzyosiowego żyroskopu, wykorzystującego odpowiednio ukształtowaną płytkę krzemu do pomiaru prędkości kątowych, z jakimi czujnik obraca się wokół osi układu współrzędnych.
 
 \begin{figure}[H]
 	\centering
@@ -207,7 +207,7 @@ Jak już wcześniej wspomniano, żyroskopy MEMS korzystają z zupełnie innych z
         \label{fig:3d_gyro}
 \end{figure}
 
-W żyroskopie, którego struktura pokazana jest na rysunku ~\ref{fig:3d_gyro}, mamy do czynienia z czterema masami $M1$, $M2$, $M3$, $M4$ wibrującymi jednocześnie w płaszczyźnie poziomej. Dzięki takiej strukturze można wykryć prędkości kątowe wokół wszystkich trzech osi. Przy obrocie struktury wokół osi $X$ masy $M1$ oraz $M3$ w wyniku zadziałania siły Coriolisa odchylą się w przeciwne strony wzdłuż osi prostopadłej do płaszczyzny drgań. Odchylenie to może zostać zmierzone za pomocą za pomocą zmiany pojemności kondensatorów płaskich, zawartych w strukturze żyroskopu (kondensatory te będą działały na tej samej zasadzie co kondensatory używane w akcelerometrach MEMS) . Dzięki temu można wyznaczyć wartość prędkości obrotowej wokół osi $X$. Dla obrotu wokół osi $Y$ zachowanie struktury będzie wyglądać analogicznie, z tą różnicą że wychyleniu ulegną masy $M2$ i $M4$. Dla obrotu wokół osi $Z$, dla struktury pokazanej na rysunku masy $M2$ i $M4$ nadal będą drgać w dotychczasowej płaszczyźnie, jednak w wyniku działania siły Coriolisa zaczną drgać w przeciwne strony, co zostało pokazane za pomocą żółtych i czerwonych strzałek.
+W żyroskopie, którego struktura pokazana jest na rysunku ~\ref{fig:3d_gyro}, mamy do czynienia z czterema masami $M1$, $M2$, $M3$, $M4$ przymocowanymi za pomocą sprężyn do ramy stanowiącej punkt odniesienia i wibrującymi jednocześnie w płaszczyźnie poziomej. Dzięki takiej strukturze można wykryć prędkości kątowe wokół wszystkich trzech osi. Przy obrocie struktury wokół osi $X$ masy $M1$ oraz $M3$ w wyniku zadziałania siły Coriolisa odchylą się w przeciwne strony wzdłuż osi prostopadłej do płaszczyzny drgań. Odchylenie to może zostać zmierzone za pomocą za pomocą zmiany pojemności kondensatorów płaskich, zawartych w strukturze żyroskopu (kondensatory te będą działały na tej samej zasadzie co kondensatory używane w akcelerometrach MEMS) . Dzięki temu można wyznaczyć wartość prędkości obrotowej wokół osi $X$. Dla obrotu wokół osi $Y$ zachowanie struktury będzie wyglądać analogicznie, z tą różnicą że wychyleniu ulegną masy $M2$ i $M4$. Dla obrotu wokół osi $Z$, dla struktury pokazanej na rysunku masy $M2$ i $M4$ nadal będą drgać w dotychczasowej płaszczyźnie, jednak w wyniku działania siły Coriolisa zaczną drgać w przeciwne strony, co zostało pokazane za pomocą żółtych i czerwonych strzałek.
 
 
 %----------------------------------------------------------------------------------------
