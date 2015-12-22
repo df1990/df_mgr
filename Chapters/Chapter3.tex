@@ -14,9 +14,9 @@
 
 \section{Podstawy matematyczne}
 
-Fizyczne podstawy lotu opisane w rozdziale~\ref{Chapter2} tłumaczą, że ruch postępowy kwadrokoptera w pionie jest wynikiem braku równowagi między wypadkową siłą ciągu wszystkich silników a siłą grawitacji działającą na urządzenie, natomiast ruch w płaszczyźnie poziomej dla konfiguracji przedstawionej na rysunku ~\ref{fig:quadrotor_forces} jest wynikiem obrotu kwadrokoptera wokół osi $X_b$ lub $Y_b$. Wiadomo również, że wypadkowa siła działająca na kwadrokopter może być zmieniana poprzez proporcjonalną zmianę prędkości obrotowych wszystkich czterech wirników jednocześnie, oraz że obrót kwadrokoptera wokół dowolnej jego osi jest wynikiem braku równowagi między prędkościami kątowymi odpowiednich par wirników. Informacje te prowadzą do konkluzji, że wszystkie sześć stopni swobody kwadrokoptera może być kontrolowanych jedynie za pomocą odpowiedniej zmiany prędkości obrotowych wirników. Powstaje zatem pytanie, w jaki sposób kontrolować prędkości obrotowe wirników, chcąc uzyskać zamierzoną zmianę położenia kwadrokoptera w przestrzeni. 
+Fizyczne podstawy lotu opisane w rozdziale~\ref{Chapter2} tłumaczą, że ruch postępowy kwadrokoptera w pionie jest wynikiem braku równowagi między wypadkową siłą ciągu wszystkich silników a siłą grawitacji działającą na urządzenie, natomiast ruch w płaszczyźnie poziomej dla konfiguracji przedstawionej na rysunku ~\ref{fig:quadrotor_forces} jest wynikiem obrotu kwadrokoptera wokół osi $X_b$ lub $Y_b$~\cite{quadro8, quadro9}. Wiadomo również, że wypadkowa siła działająca na kwadrokopter może być zmieniana poprzez proporcjonalną zmianę prędkości obrotowych wszystkich czterech wirników jednocześnie, oraz że obrót kwadrokoptera wokół dowolnej jego osi jest wynikiem braku równowagi między prędkościami kątowymi odpowiednich par wirników. Informacje te prowadzą do konkluzji, że wszystkie sześć stopni swobody kwadrokoptera może być kontrolowanych jedynie za pomocą odpowiedniej zmiany prędkości obrotowych wirników. Powstaje zatem pytanie, w jaki sposób kontrolować prędkości obrotowe wirników, chcąc uzyskać zamierzoną zmianę położenia kwadrokoptera w przestrzeni. 
 
-Rozważmy model kwadrokoptera przedstawiony na rysunku ~\ref{fig:quadrotor_forces}. Dla tak oznaczonych osi oraz numeracji silników możemy zapisać następujący komplet równań:
+Rozważmy model kwadrokoptera przedstawiony na rysunku ~\ref{fig:quadrotor_forces}. Dla tak oznaczonych osi oraz numeracji silników możemy zapisać następujący komplet równań~\cite{quadro9}:
 \begin{equation}
 \begin{aligned}
 	\dot{\phi} &= k_r((\omega_1 + \omega_4) - (\omega_2 + \omega_3)) \\
@@ -98,7 +98,7 @@ Po tych operacjach, otrzymujemy równanie
 
 Równanie~\ref{eq:omega_as_function} jest podstawą do stworzenia najprostszego algorytmu stabilizacji i kontroli lotu. Alogrytm ten będzie liczył wartości sygnałów sterujących, przekładających się następnie na prędkości obrotowe śmigieł, na podstawie zadanych prędkości kątowych kwadrokoptera wokół osi układu współrzędnych, a także zadanego wypadkowego ciągu silników. Chcąc wyznaczać prędkości wirników w czysto matematyczny sposób, podczas implementacji algorytmu należałoby wyznaczyć wspomniane wcześniej współczynniki $k_r$, $k_p$, $k_y$, $k_t$, co byłoby stosunkowo trudne i czasochłonne. Podejście to ma również znaczącą wadę: wyliczone współczynniki zależałyby od fizycznych właściwości systemu (długość ramienia kwadrokoptera, masa śmigieł, kąt natarcia śmigieł itp.) i przy zmianie któregokolwiek z fizycznych parametrów modelu, określone wcześniej współczynniki należałoby przeliczyć na nowo, co w praktyce dyskwalifikuje taką formę algorytmu. 
 
-Alternatywą dla takiego podejścia jest zastosowanie algorytmu opartego o regulatory działające w pętli sprzężenia zwrotnego. Wykorzystuje on informację o rzeczywistych prędkościach obrotowych urządzenia porównując je z wartościami zadanymi otrzymanymi na wejściu i na tej podstawie liczy odpowiednią poprawkę sygnałów sterujących silnikami. 
+Alternatywą dla takiego podejścia jest zastosowanie algorytmu opartego o regulatory działające w pętli sprzężenia zwrotnego. Wykorzystuje on informację o rzeczywistych prędkościach obrotowych urządzenia porównując je z wartościami zadanymi otrzymanymi na wejściu i na tej podstawie liczy odpowiednią poprawkę sygnałów sterujących silnikami~\cite{quadro9}. 
 
 Algorytm kontrolujący prędkość obrotową kwadrokoptera wokół jednej osi będzie składał się z następujących kroków:
 
@@ -118,7 +118,7 @@ Algorytm kontrolujący prędkość obrotową kwadrokoptera wokół jednej osi b�
 	\label{fig:rate_controll_algorithm}
 \end{figure}
 
-Rysunek ~\ref{fig:rate_controll_algorithm} przedstawia strukturę omawianego algorytmu, zdolnego do kontroli prędkości obrotowej kwadrokoptera wokół każdej z trzech osi. Wartości zadane prędkości obrotowych wokół trzech osi układu współrzędnych transmitowane są drogą radiową, po czym trafiają na wejścia trzech regulatorów, odpowiedzialnych za utrzymanie stałych prędkości kątowych. Wartości wyjściowe z regulatorów wraz z wypadkową wartością ciągu wszystkich silników (również transmitowaną radiowo) konwertowane są następnie na wartości czterech sygnałów PWM, sterujących silnikami. Efektem sterowania silnikami jest pewnien określony obrót kwadrokoptera w trójwymiarowej przestrzeni, który jest z kolei mierzony za pomocą czujnika (na przykład trzyosiowego żyroskopu). Rzeczywiste wartości prędkości kątowych kwadrokoptera są następnie wykorzystywane przez regulatory w pętli sprzężenia zwrotnego, w celu wprowadzenia ewentualnej poprawki w wartościach sygnałów PWM. Algorytm nie precyzuje jaki rodzaj kontrolera ma być użyty, zatem najczęsciej używany jest regulator PID, głównie ze względu na prostotę implementacji oraz szeroki zasób materiałów dostępnych na jego temat.
+Rysunek ~\ref{fig:rate_controll_algorithm} przedstawia strukturę omawianego algorytmu, zdolnego do kontroli prędkości obrotowej kwadrokoptera wokół każdej z trzech osi. Wartości zadane prędkości obrotowych wokół trzech osi układu współrzędnych transmitowane są drogą radiową, po czym trafiają na wejścia trzech regulatorów, odpowiedzialnych za utrzymanie stałych prędkości kątowych. Wartości wyjściowe z regulatorów wraz z wypadkową wartością ciągu wszystkich silników (również transmitowaną radiowo) konwertowane są następnie na wartości czterech sygnałów PWM, sterujących silnikami. Efektem sterowania silnikami jest pewnien określony obrót kwadrokoptera w trójwymiarowej przestrzeni, który jest z kolei mierzony za pomocą czujnika (na przykład trzyosiowego żyroskopu). Rzeczywiste wartości prędkości kątowych kwadrokoptera są następnie wykorzystywane przez regulatory w pętli sprzężenia zwrotnego, w celu wprowadzenia ewentualnej poprawki w wartościach sygnałów PWM. Algorytm nie precyzuje jaki rodzaj kontrolera ma być użyty, zatem najczęsciej używany jest regulator PID, głównie ze względu na prostotę implementacji oraz szeroki zasób materiałów dostępnych na jego temat~\cite{quadro9}.
 
 Omawiany algorytm jest bardzo prosty w implementacji, dzięki czemu można go zastosować nawet w mikrokontrolerach, wyposażonych w niewielkie zasoby sprzętowe. Daje on bardzo dużą kontrolę nad kwadrokopterem - przy ustawieniu zadanej prędkości obrotowej na przykład wokół osi $X_b$ na wartość \SI{30}{\degree\per\second} kwadrokopter będzie się obracał z taką prędkością niezależnie od jego położenia względem ziemi. Pozwala to na wykonywanie rozmawitych akrobacji, jednakże wymaga od pilota dużej wprawy w sterowaniu maszyną, ze względu na konieczność ręcznej stabilizacji położenia kwadrokoptera względem ziemi. Dla przykładu, jeśli wychylimy drążek przechylenia, kwadrokopter w konfiguracji pokazanej na rysunku  ~\ref{fig:quadrotor_forces} otrzyma informację odnośnie prędkości obrotowej wokół osi $Y_b$ i zacznie poruszać się wzdłuż osi $X_e$. W momencie gdy użytkownik cofnie drążek wychylenia do pozycji spoczynkowej kwadrokopter przestanie obracać się  wokół osi $Y_b$, jednak ruch wzdłuż osi $X_e$ nie ustanie. Chcąc powrócić do stanu zawisu w powietrzu, użytkownik sam musi przesunąć drążek wychylenia w przeciwną stronę, tak aby kwadrokopter powrócił do pozycji poziomej. 
 
@@ -133,9 +133,9 @@ Obecnie dostępne czujniki, które można zamontować na prostym modelu kwadroko
 	\item Akcelerometr
 \end{itemize} 
 
-Wykorzystanie żyroskopu polega na całkowaniu jego pomiarów (prędkości kątowych) w czasie, tak aby uzyskać wartości kątów obrotu wokół odpowiednich osi. Rozwiązanie to ma jednak jedną wadę - sygnały wyjściowe obecnie produkowanych  żyroskopów zawsze obarczone są niewielkim błędem (zależnym od temperatury i zmiennym w czasie), który będąc całkowany razem z rzeczywistą wartością prędkości obrotowej doprowadziłby do znacznej różnicy między rzeczywistą wartością kąta obrotu a wartością wynikającą z policzonej całki. Sprawia to, że pomiar kąta obrotu dokonany za pomocą takiej metody nie jest miarodajny.
+Wykorzystanie żyroskopu polega na całkowaniu jego pomiarów (prędkości kątowych) w czasie, tak aby uzyskać wartości kątów obrotu wokół odpowiednich osi. Rozwiązanie to ma jednak jedną wadę - sygnały wyjściowe obecnie produkowanych  żyroskopów zawsze obarczone są niewielkim błędem (zależnym od temperatury i zmiennym w czasie), który będąc całkowany razem z rzeczywistą wartością prędkości obrotowej doprowadziłby do znacznej różnicy między rzeczywistą wartością kąta obrotu a wartością wynikającą z policzonej całki~\cite{quadro9, filters1}. Sprawia to, że pomiar kąta obrotu dokonany za pomocą takiej metody nie jest miarodajny.
 
-Wykorzystanie akcelerometru polega na odczytywaniu przyspieszeń liniowych wzdłuż każdej z osi kwadrokoptera, a następnie na przekształceniu ich za pomocą funkcji trygonometrycznych na wartości kątów przechylenia i wychylenia zgodnie z poniższymi wzorami [odniesienie do bibliografii]:
+Wykorzystanie akcelerometru polega na odczytywaniu przyspieszeń liniowych wzdłuż każdej z osi kwadrokoptera, a następnie na przekształceniu ich za pomocą funkcji trygonometrycznych na wartości kątów przechylenia i wychylenia zgodnie z poniższymi wzorami~\cite{mems5}:
 
 \begin{equation}
 	\phi = \arctan(\frac{a_y}{\sqrt{a{_z}^2 + a{_x}^2}})
@@ -163,9 +163,9 @@ Reasumując mamy dwie metody estymacji kąta pochylenia i przechylenia, obarczon
 		\end{itemize}
 \end{itemize}
 
-W świetle niedoskonałości każdej z dwóch wspomnianych metod, rozwiązaniem problemu będzie połączenie wartości pomiarów obu czujników i wykorzystanie odpowiedniej funkcji fuzji danych z sensorów (ang. sensor fusion function), umożliwiającej estymację położenia kwadrokoptera w przestrzeni.
+W świetle niedoskonałości każdej z dwóch wspomnianych metod, rozwiązaniem problemu będzie połączenie wartości pomiarów obu czujników i wykorzystanie odpowiedniej funkcji fuzji danych z sensorów (ang. sensor fusion function), umożliwiającej estymację położenia kwadrokoptera w przestrzeni~\cite{filters1}.
 
-Wśród wielu znanych funkcji, które mogą zostać użyte do obliczania położenia kwadrokoptera w przestrzeni, wyróżnić można dwie najbardziej popularne [odniesienia do bibliografii]:
+Wśród wielu znanych funkcji, które mogą zostać użyte do obliczania położenia kwadrokoptera w przestrzeni, wyróżnić można dwie najbardziej popularne~\cite{filters1, filters2, filters3}:
 \begin{itemize}
 	\item Filtr Kalmana
 	\item Filtry komplementarne
@@ -202,7 +202,7 @@ Mając wiedzę na temat najbardziej popularnych funkcji fuzji danych z czujnikó
 	\centering
 	\includegraphics[width=1.0\textwidth]{Pictures/angle_control_algorithm.png}
 		%\rule{35em}{0.5pt}
-		\caption[Algorytm kontroli położenia kwadrokoptera]{Algorytm kontroli położenia kwadrokoptera}
+		\caption[Algorytm kontroli położenia kwadrokoptera]{Algorytm kontroli położenia kwadrokoptera~\cite{quadro9}}
 	\label{fig:angle_control_algorithm}
 \end{figure}
 
