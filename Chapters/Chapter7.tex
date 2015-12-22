@@ -35,6 +35,8 @@ Na potrzeby testów kontrolera silnika należało stworzyć prosty generator syg
 
 Rysunek ~\ref{fig:TestSignalGenerator_sch} przedstawia uproszczony schemat omawianego układu. Na wyjściu oznaczonym jako ''TEST\_PWM'' pojawiają się impulsy sterujące kontrolerem silnika, o szerokości wahającej się w przedziale od 1ms do 2ms, w zależności od położenia potencjometru.
 
+Poniższy listing przedstawia kod programu, napisany na potrzeby generowania impulsów testowych. Jak widać wyjściowy sygnał PWM jest generowany programowo, ze względu na chęć uzyskania większej dokładności wytwarzanego przebiegu. Algorytm działania układu jest bardzo prosty - 8-bitowa wartość, pobierana z przetwornika analogowo-cyfrowego konwertowana jest następnie na 16-bitową wartość stanowiącą wartość współczynnika wypełnienia impulsu o szerokości 1ms. Następnie do tej wartości dodawana jest stała wartość będąca opóźnieniem pełnej 1ms i tak przygotowana wartość zostaje odliczona przez 16-bitowy Timer1 mikrokontrolera. Generowane impulsy powtarzają się co 4ms, dzięki wpisaniu do rejestru OCR1A timera przeliczonej wartości odpowiadającej wspomnianemu opóźnieniu.
+
 \begin{lstlisting}
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -121,7 +123,7 @@ int main(void)
 }
 \end{lstlisting}
 
-Powyższy listing przedstawia kod programu, napisany na potrzeby generowania impulsów testowych. Jak widać wyjściowy sygnał PWM jest generowany programowo, ze względu na chęć uzyskania większej dokładności wytwarzanego przebiegu. Algorytm działania układu jest bardzo prosty - 8-bitowa wartość, pobierana z przetwornika analogowo-cyfrowego konwertowana jest następnie na 16-bitową wartość stanowiącą wartość współczynnika wypełnienia impulsu o szerokości 1ms. Następnie do tej wartości dodawana jest stała wartość będąca opóźnieniem pełnej 1ms i tak przygotowana wartość zostaje odliczona przez 16-bitowy Timer1 mikrokontrolera. Generowane impulsy powtarzają się co 4ms, dzięki wpisaniu do rejestru OCR1A timera przeliczonej wartości odpowiadającej wspomnianemu opóźnieniu.
+
 
 \subsection{Testy pojedynczego kontrolera silnika}
 
@@ -137,8 +139,8 @@ Rysunek ~\ref{fig:MotorController_test_single} przedstawia system pomiarowy zest
 
 W trakcie testów pojedynczego kontrolera silników napotkano na następujące problemy:
 \begin{itemize}
-	\item \textbf{Zakłócenia zasilania powodujące restart mikrokontrolera ATtiny85} - przyczyną problemu ukazały się zakłócenia generowane przez silnik szczotkowy w momencie przełączania jego uzwojeń. Przedostawały się ona na linie zasilania mikrokontrolera i powodowały jego niedeterministyczne zachowania do których zaliczały się częste zawieszenia i restarty układu. Rozwiązaniem problemu okazało się dodanie większych kondensatorów odsprzęgających przy samych wyprowadzeniach zasilania mikrokontrolera oraz dodanie kondensatora o bardzo małej wartości (22pF) tuz przy diodzie Schottky'ego zabezpieczającej silnik, która służyła jako pierwszy filtr zakłóceń elektromagnetycznych. Po tych zabiegach uzyskano znaczną poprawę stabilności zasilania mikrokontrolera oraz poprawę pracy silnika szczotkowego.
-	\item \textbf{Źle dobrana częstotliwość sygnału PWM, sterującego silnikiem} - błąd ten występował dla sygnału PWM sterującego silnikiem o częstotliwości 18kHz. Prawdopodobną przyczyną był rezonans między indukcyjnością uzwojeń silnika a pojemnością diody Schottky'ego zastosowaną do niwelowania zakłóceń, które generowal silnik. Rozwiązaniem problemu okazało się zmniejszenie częstotliwości sygnału PWM do wartości około 2kHz, przy której zakłócenia nie były już tak dokuczliwe.
+	\item \textbf{Zakłócenia zasilania powodujące restart mikrokontrolera ATtiny85} - przyczyną problemu ukazały się zakłócenia generowane przez silnik szczotkowy w momencie przełączania jego uzwojeń. Przedostawały się ona na linie zasilania mikrokontrolera i powodowały jego niedeterministyczne zachowania do których zaliczały się częste zawieszenia i restarty układu. Rozwiązaniem problemu okazało się dodanie większych kondensatorów odsprzęgających przy samych wyprowadzeniach zasilania mikrokontrolera oraz dodanie kondensatora o bardzo małej wartości (22pF) tuz przy diodzie Schottky'ego zabezpieczającej silnik, które wspólnie służyły jako  filtr zakłóceń mogących przedostać się na linie zasilania mikrokontrolera. Po tych zabiegach uzyskano znaczną poprawę stabilności zasilania mikrokontrolera oraz poprawę pracy silnika szczotkowego, dzięki czemu zawieszenia i ponowne uruchomienia układu zostały całkowicie zniwelowane.
+	\item \textbf{Źle dobrana częstotliwość sygnału PWM, sterującego silnikiem} - błąd ten występował dla sygnału PWM sterującego silnikiem o częstotliwości 18kHz. Prawdopodobną przyczyną były zbyt duże skoki napięcia wytwarzane w trakcie przełączania uzwojeń silnika. Rozwiązaniem problemu okazało się zmniejszenie częstotliwości sygnału PWM do wartości około 2kHz, przy której zakłócenia nie były już tak dokuczliwe.
 	\item \textbf{Zbyt gwałtowne zmiany wyjściowego sygnału PWM, przy ewentualnych błędach sygnału sterującego} - błąd ten występował przy nieprzewidzianych zmianach stanu sygnału wejściowego, takich jak zwarcie do plusa zasilania lub jego odłączenie. Powodowało to gwałtowne zmiany współczynnika wypełnienia sygnału PWM sterującego silnikiem, co w przypadku jednego prototypu doprowadziło do jego trwałego uszkodzenia. Rozwiązaniem tego problemu było dodanie procedury uśredniającej wartości ośmiu ostatnich czasów trwania impulsów sterujących, dzięki czemu nawet najbardziej gwałtowne zmiany sygnału wejściowego nie zagrażały już sterownikowi silnika.
 \end{itemize}
 
@@ -162,7 +164,7 @@ Rysunek ~\ref{fig:MotorController_test_four} przedstawia schemat układu zestawi
 	\centering
 	\includegraphics[scale=0.15]{Pictures/PowerDistributionBoard.png}
 		%\rule{35em}{0.5pt}
-	\caption[Zdjęcie płytki rozprowadzającej zasilanie w kwadrokopterze (1) oraz skróconych i pogrubionych przewodów zasilających sterownik silnika (2)]{Zdjęcie płytki rozprowawdzającej zasilanie w kwadrokopterze (1) oraz skróconych i pogrubionych przewodów zasilających sterownik silnika (2)}
+	\caption[Zdjęcie płytki rozprowadzającej zasilanie w kwadrokopterze (1) oraz skróconych i pogrubionych przewodów zasilających sterownik silnika (2)]{Zdjęcie płytki rozprowadzającej zasilanie w kwadrokopterze (1) oraz skróconych i pogrubionych przewodów zasilających sterownik silnika (2)}
 	\label{fig:PowerDistribudionBoard}
 \end{figure}
 
@@ -185,6 +187,7 @@ Rysunek ~\ref{fig:QuadrotorController_test} przedstawia schemat blokowy zestawu 
 	\item \textbf{Wstępne testy algorytmu stabilizacji i kontroli lotu} - testy te polegały na wysyłaniu binarnych wartości zadanego ciągu silników oraz prędkości kątowych kwadrokoptera wokół trzech osi układu współrzędnych, a następnie na obserwacji generowanych sygnałów sterujących. Ich celem było sprawdzenie stabilności algorytmu kontroli lotu kwadrokoptera oraz przetestowanie implementacji regulatorów PID.   
 \end{itemize}
 
+Wszystkie testy przebiegły pomyślnie, potwierdzając stabilność implementacji wszystkich modułów programowych kontrolera lotu.
 
 \section{Testy aplikacji użytkownika}
 
@@ -228,10 +231,12 @@ Rysunek ~\ref{fig:QuadroTestStationZoom} przedstawia zbliżenie kwadrokoptera uk
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.12]{Pictures/QuadroTestStationZoom.jpg}
+	\includegraphics[scale=0.55]{Pictures/quadro_mont_poprawiony.png}
 		%\rule{35em}{0.5pt}
-	\caption[System mocowania kwadrokoptera do stanowiska testowego]{System mocowania kwadrokoptera do stanowiska testowego}
-	\label{fig:QuadroTestStationZoom2}
+	\caption[System poprawionego mocowania kwadrokoptera do stanowiska testowego]{System poprawionego mocowania kwadrokoptera do stanowiska testowego}
+	\label{fig:QuadroTestStationZoomPoprawiony}
 \end{figure}
 
-Rysunek ~\ref{fig:QuadroTestStationZoom2} przedstawia poprawioną wersję montażu kwadrokoptera do stanowiska testowego. Jak widać kształt łączników został tak zmieniony, aby oś obrotu pokrywała się w dużej mierze z położeniem środka ciężkości kwadrokoptera. Co więcej, nowe łączniki umożliwiają zmianę położenia osi obrotu względem ramy kwadrokoptera, dzięki czemu potencjalne zmiany jego środka ciężkości nie będą stwarzać problemów w trakcie testów. Drugą widoczną zmianą jest rozcięcie aluminiowego pręta na dwie części, co było koniecznością, jako że przy zamontowaniu nowych łączników zahaczałby on o ramę kwadrokoptera. 
+Rysunek ~\ref{fig:QuadroTestStationZoomPoprawiony} przedstawia poprawioną wersję montażu kwadrokoptera do stanowiska testowego. Jak widać kształt łączników został tak zmieniony, aby oś obrotu pokrywała się w dużej mierze z położeniem środka ciężkości kwadrokoptera. Co więcej, nowe łączniki umożliwiają zmianę położenia osi obrotu względem ramy kwadrokoptera, dzięki czemu potencjalne zmiany jego środka ciężkości nie będą stwarzać problemów w trakcie testów. Drugą widoczną zmianą jest rozcięcie aluminiowego pręta na dwie części, co było koniecznością, jako że przy zamontowaniu nowych łączników zahaczałby on o ramę kwadrokoptera.
+
+Strojenie regulatorów PID przebiegło pomyślnie, dzięki czemu zyskano mozliwość płynnej regulacji prędkości obrotowej kwadrokoptera wokół osi $X_b$ oraz $Y_b$. 
