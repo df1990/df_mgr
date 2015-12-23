@@ -74,9 +74,9 @@
 %----------------------------------------------------------------------------------------
 %	MARGINS
 %----------------------------------------------------------------------------------------
-\setmarginsrb  { 1.5in}  % left margin
+\setmarginsrb  { 32mm}  % left margin
                         { 0.6in}  % top margin
-                        { 1.0in}  % right margin
+                        { 15mm}  % right margin
                         { 0.8in}  % bottom margin
                         {  20pt}  % head height
                         {0.25in}  % head sep
@@ -181,15 +181,15 @@
 %	defined as \examname above so you cite it as \examname
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Thesis Title} % Your thesis title - this is used in the title and abstract
+\thesistitle{Układy sterujące i oprogramowanie dla modelu czterowirnikowego śmigłowca} % Your thesis title - this is used in the title and abstract
 %-------------------------------------------------  
-\supervisor{Dr. James \textsc{Smith}} % You supervisor's name - this is used in the title page
+\supervisor{dr inż. Krzysztof Arnold} % You supervisor's name - this is used in the title page
 %-------------------------------------------------   
 \examiner{} % Your examiner's name - this is not currently used anywhere in the template, cite it with \examname if you want it
 %-------------------------------------------------   
-\degree{Doctor of Philosophy} % Your degree name - this is currently used in the title page and abstract
+\degree{} % Your degree name - this is currently used in the title page and abstract
 %-------------------------------------------------   
-\authors{John \textsc{Smith}} % Your name - this is used in the title page and abstract
+\authors{Dariusz Fertyk} % Your name - this is used in the title page and abstract
 %-------------------------------------------------   
 \addresses{} % Your address - this is not currently used anywhere in the template, cite it with \addressnames if you want it
 %-------------------------------------------------   
@@ -197,9 +197,9 @@
 %-------------------------------------------------   
 \keywords{} % Keywords for your thesis - this is not currently used anywhere in the template, cite it with \keywordnames if you want it
 %-------------------------------------------------   
-\university{\texorpdfstring{\href{http://www.university.com} % Your university's URL
-                {University Name}} % Your university's name - this is currently used in the title page
-                {University Name}}
+\university{\texorpdfstring{\href{http://www.put.poznan.pl} % Your university's URL
+                {Politechnika Poznańska}} % Your university's name - this is currently used in the title page
+                {Politechnika Poznańska}}
 %-------------------------------------------------   
 \UNIVERSITY{\texorpdfstring{\href{University Web Site URL Here (include http://)} % Your university's URL
                 {UNIVERSITY NAME (IN BLOCK CAPITALS)}} % Your university's name in capitals - this is currently used in the abstract page
@@ -323,9 +323,10 @@
 \addcontentsline{toc}{chapter}{#1}}
 \renewcommand\tableofcontents{
 \btypeout{Table of Contents}
-\addtotoc{Contents}
+%\addtotoc{Contents}
+\thispagestyle{empty}
 \begin{spacing}{1}{
-    \setlength{\parskip}{1pt}
+    \setlength{\parskip}{1.1pt}
     \if@twocolumn
       \@restonecoltrue\onecolumn
     \else
